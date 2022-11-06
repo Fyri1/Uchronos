@@ -1,9 +1,7 @@
 # dependencies
 /node_modules
-package-lock.json
 
-# production
-/build
+package-lock.json
 
 # misc
 .DS_Store

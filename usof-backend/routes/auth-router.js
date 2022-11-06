@@ -1,18 +1,11 @@
-import  loginController  from "../controllers/auth-controller.js";
-import express from "express";
-import Authorization from '../controllers/authen-controll.js';
+import Express from 'express';
+
+import authController from "../controllers/auth-controller.js";
 
 
-const router = express.Router();
-router.post('/register', loginController.Register);
-router.get('/emailact/:token', loginController.EmailActiv);
-router.post('/login', loginController.Login);
-router.post('/logout', loginController.Logout);
+const router = Express.Router();
 
-router.post('/password-reset', loginController.SendPasswordReset);
-router.get('/password-reset/:token',loginController.AuthControllerPassResetConfirm);
-router.post('/auth/password-reset/:token', loginController.AuthControllerPassResetApply);
+router.post("/register", authController.Register);
 
-  
+
 export default router;
-
