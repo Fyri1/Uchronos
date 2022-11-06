@@ -1,56 +1,97 @@
-/* Whole design things */
-/* https://ibb.co/ys413d2 */
+@import url('https://fonts.googleapis.com/css?family=Lato:100&display=swap');
 body{
     margin: 0;
     padding: 0;
+    
 }
 
 .header {
-   background-color: #091921;
-    display: flex;
-  
-    /* padding: 20px; */
-    height: 100px;
-    width:  100%;
-    margin-left:10px;
-    border-radius: 10px 10px 10px 10px;
-    margin: 0;
-    padding: 0;
-}
-
-.nav-buttons {
-
-    width:100%;
-
-    justify-content:flex-end;
-    
-    font-size: large;
-    display: flex;
+    width: 100%;
     height: 100%;
-    text-align: center;
-    float:right;
-
+    overflow: hidden;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    font-family: 'Open Sans Condensed', sans-serif;
     
-
+   
 }
-#left-button {
 
+.center {
+  
+  top: 100px;
+  width: 180px;
+  height: 60px;
+  position: absolute;
+  
+}
+.container-left-button{
+    margin-left: 35%;
+    margin-right: 35%;
+    width: 2em;
+    position: fixed;
+    
+    
+}
+
+.container-right-button{
+    margin-left: 55%;
+    margin-right: 55%;
+    width: 2em;
+    position: absolute;
+}
+.btn {
+  width: 180px;
+  height: 60px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #f7e08c;
+  outline: none;
+  transition: 1s ease-in-out;
+  
+}
+
+.border {
+  position: absolute;
+  left: 0;
+  top: 0;
+  fill: none;
+  stroke: #fff;
+  stroke-dasharray: 150 480;
+  stroke-dashoffset: 150;
+  transition: 1s ease-in-out;
+}
+
+.btn:hover {
+  transition: 0.5s ease-in-out;
+  background: #a78d31;
+}
+
+.btn:hover svg {
+  stroke-dashoffset: -480;
+}
+
+.btn p {
+  color: white;
+  font-size: 18px;
+  font-weight: 100;
+}
+/* #left-button {
     background-color: rgb(121, 223, 130);
     height: 40%;
     margin-top: 20px;
     width: 100px;
- 
-
-    ;
     color: rgb(69, 44, 85);
     border-radius: 1px;
     font-weight: bold;
-    font-size: 19px; /*текст больше в кнопке*/
-    
+    font-size: 19px; 
     border-radius: 100px;
    
-}
-#right-button {
+} */
+
+
+/* #right-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -62,32 +103,7 @@ body{
     color: rgb(78, 41, 102);
     border-radius: 5px;
     font-weight: bold;
-    font-size: 19px; /*текст больше в кнопке*/
+    font-size: 19px; 
     
     border-radius: 100px;
-}
-#left-button:hover {
-    background-color: rgb(62, 136, 124);
-    cursor: pointer;
-}
-#right-button:hover {
-    background-color: rgb(153, 5, 5);
-    cursor: pointer;
-}
-
-
-
-.footer {
-    background-color: #adadad;
-    text-align: center;
-    padding: 10px;
-}
-
-.H1MyForrum{
-    
-    width:100%;
-    justify-content:flex-end;
-    display:flex;
-    font-family:Andale Mono, monospace;
-    
-}
+}*/

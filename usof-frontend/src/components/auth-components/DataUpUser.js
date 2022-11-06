@@ -7,7 +7,7 @@ function DataUpUser({labelText, errors, credentials, setCredentials}) {
 
   return (
     <div>
-      <p className="PRegist">Your {labelText}:</p>
+      <p className="PRegist">Your {labelText}</p>
 
 
       <input  id={labelText} onChange={inp => setCredentials(() => {

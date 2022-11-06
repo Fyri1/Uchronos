@@ -14,7 +14,7 @@ function Header() {
     async function LoginUser () {
         try
         {
-            const response =  navigate("/login");
+            navigate("/login");
         } 
         catch (err){
             console.log(err);
@@ -78,17 +78,39 @@ function Header() {
       {
         !localStorage.getItem("token")
         ?  // если тру 
-        <div className="box-3">
-          
-            <div className="btn btn-three">
-              <button id="left-button" onClick={LoginUser} type="submit">Login</button>
+        <div>
+          <div class="container-left-button">
+            <div class="center">
+            <div className="rightButton">
+              <button onClick={LoginUser} type="submit" class="btn">
+                <svg width="180px" height="60px" viewBox="0 0 180 60" class="border">
+                  <polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" />
+                  <polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" />
+                </svg>
+                <p>Login</p>
+              </button>
+              </div>
             </div>
-
-            <button id="right-button"  onClick={Register} type="submit">Register</button>
+          </div>
+          <div class="container-right-button">
+            <div class="center">
+            <div className="rightButton">
+              <button onClick={Register} type="submit" class="btn">
+                <svg width="180px" height="60px" viewBox="0 0 180 60" class="border">
+                  <polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" />
+                  <polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" />
+                </svg>
+                <p>Register</p>
+              </button>
+              </div>
+            </div>
+          </div>
         </div>
+        
+
         : // если фолс
-        <div className="box-3">
-          <div className="btn btn-three">
+        <div className="nav-buttons">
+          <div className="FirstButton">
           <button id="left-button" onClick={Profile} type="submit">Profile</button>
           </div>
           
