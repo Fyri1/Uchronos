@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
-// import image from "../components/avatar/logo.jpg";
 
 import "../components/css-files/Header.css"
 

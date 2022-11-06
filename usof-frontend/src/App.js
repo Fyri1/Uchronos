@@ -8,7 +8,7 @@ import PassReset from "./components/auth-components/PassReset.js";
 import PageNotFound from "./components/PageNotFound.js";
 
 
-import './App.css';
+
 
 function App() {
   return (
