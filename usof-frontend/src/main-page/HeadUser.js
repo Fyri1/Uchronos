@@ -72,32 +72,26 @@ function Header() {
 
 
 
-  function logoClick() {
-    navigate("/");
-  }
-
   return (
     <div className="header">
 
       {
         !localStorage.getItem("token")
         ?  // если тру 
-        <div className="nav-buttons">
+        <div className="box-3">
           
-          {/* <img className="logoImage" src={image} onClick={logoClick} width="50" height="50"></img> */}
-          
-            <div className="FirstButton">
+            <div className="btn btn-three">
               <button id="left-button" onClick={LoginUser} type="submit">Login</button>
             </div>
 
             <button id="right-button"  onClick={Register} type="submit">Register</button>
         </div>
         : // если фолс
-        <div className="nav-buttons">
-          <div className="FirstButton">
+        <div className="box-3">
+          <div className="btn btn-three">
           <button id="left-button" onClick={Profile} type="submit">Profile</button>
           </div>
-          {/* <Link to={`/profile/${localStorage.getItem("id")}`}>Profile</Link> */}
+          
           <button  id="right-button" onClick={Logout} type="submit">Logout</button>
           
         </div>
