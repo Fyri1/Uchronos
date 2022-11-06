@@ -6,7 +6,7 @@ body{
 }
 
 .header {
-    background-image: url("https://img.freepik.com/premium-photo/gradient-soft-cloudy-background-with-pastel-colors-luxury-purple-pink-white-gradient-decorative-background-web-template-festive-invitation-card-cover-presentation-banner-design_295890-2574.jpg");
+   background-color: #091921;
     display: flex;
   
     /* padding: 20px; */
@@ -17,15 +17,6 @@ body{
     margin: 0;
     padding: 0;
 }
-/* 
-.logoImage {
-    margin: auto;
-    width: 5%;
-} */
-
-/* .logoImage:hover {
-    cursor: pointer;
-} */
 
 .nav-buttons {
 
@@ -49,6 +40,8 @@ body{
     margin-top: 20px;
     width: 100px;
  
+
+    ;
     color: rgb(69, 44, 85);
     border-radius: 1px;
     font-weight: bold;

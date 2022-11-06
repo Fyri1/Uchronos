@@ -2,6 +2,8 @@ import React from "react";
 import Header from "./HeadUser.js";
 import '../components/css-files/MainPage.css'
 
+import  Script from  "../components/css-files/script.js"
+
 import axios from "axios";
 
 
@@ -46,26 +48,17 @@ function MainPage() {
     
       {loading && <div>Loading!</div>}
       <div className="MainPage_сlock">
-        <div className="clock">
-          <div className="hour">
-            <div className="hours">   
-            
-
-            </div>
+      <div class="clock">
+          <div class="hour">
+              <div class="hr" id="hr"></div>
           </div>
-          <div className="minute">
-            <div className="minutes">
-
-            </div>
-
+          <div class="min">
+              <div class="mn" id="mn"></div>
           </div>
-          <div className="second">
-            <div className="seconds">
-
-            </div>
+          <div class="sec">
+              <div class="sc" id="sc"></div>
           </div>
-        </div>
-
+      </div>
 
       </div>
       

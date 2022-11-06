@@ -1,40 +1,96 @@
 body{
     margin: 0;
     padding: 0;
-    background: linear-gradient(
-        rgba(255, 255, 255, 0.7),
-        rgba(255, 255, 255, 0.3)
-      );
-      background-color: #3e4042;
-         
-      background-repeat: no-repeat;
-}
-.MainPage{
-    background: linear-gradient(
-        rgba(255, 255, 255, 0.7),
-        rgba(255, 255, 255, 0.3)
-      ),
-      url("https://oir.mobi/uploads/posts/2021-03/1616538094_40-p-nezhno-fioletovii-fon-51.jpg");    /* background-image: 
-    background-repeat: no-repeat; */
 
 }
-.postPreview{
 
-    outline: 2px solid #000; /* Чёрная рамка */
-    background: rgb(146, 143, 150); /* Цвет фона */
-    width: 30%;
-    /* height: 170px; */
-    padding: 20px;
 
-    background-color: rebeccapurple;
-    color: white;
-    border-radius: 20px;
-   
-    margin-bottom: 5px;
- 
+.MainPage_сlock{
+    display: flex;
     justify-content: center;
-    font-family:Serif;
-    font-size: 20px;
+    align-items: center;
+    min-height: 100vh;
+    background: #091921;
+    background-repeat: no-repeat;
+
+}
+.clock{
+    width: 350px;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url(https://antonaniskovich.ru/filearticle/chasy-na-javascript/file/clock.png),
+    radial-gradient(circle, rgb(37, 73, 90) 0%, rgb(25, 48, 60) 11%, rgba(9,25,33,1) 38%);
+    background-size: cover;
+    border-radius: 50%;
+    box-shadow: 0 -15px 15px rgba(134, 134, 134, 0.35),
+    inset 0 -15px 15px #191919,
+    0 15px 15px rgba(134, 134, 134, 0.35),
+    inset 0 15px 15px #191919
+    ;
 }
 
+.clock:before{
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    z-index: 999;
+}
 
+.clock .hour,
+.clock .min,
+.clock .sec{
+    position: absolute;
+}
+
+.clock .hour, .hr{
+    width: 160px;
+    height: 160px;
+}
+.clock .min, .mn{
+    width: 190px;
+    height: 190px;
+}
+.clock .sec, .sc{
+    width: 230px;
+    height: 230px;
+}
+
+.hr, .mn, .sc{
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.hr:before{
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 80px;
+    background-color: #ffc600;
+    z-index: 10;
+    border-radius: 6px 6px 0 0;
+}
+.mn:before{
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 90px;
+    background-color: #fff;
+    z-index: 11;
+    border-radius: 6px 6px 0 0;
+}
+.sc:before{
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 150px;
+    background-color: #fff;
+    z-index: 12;
+    border-radius: 6px 6px 0 0;
+}
