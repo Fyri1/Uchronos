@@ -1,20 +1,15 @@
 .Register{
     display: flex;
-    align-items: center;
     justify-content: center;
-    height: 100vh;
-    background: linear-gradient(
-        rgba(255, 255, 255, 0.7),
-        rgba(255, 255, 255, 0.3)
-      ),
-      url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500");
-    background-size: cover;
-    background-position: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #091921;
+    background-repeat: no-repeat;
 
 }
 
 .RegisterH1{
-    color: rgb(77, 1, 77);
+    color: white;
     text-align: center;
 }
 .buttonRegister{
@@ -22,7 +17,7 @@
     height: 50px;
     padding: 10px;
     border: none;
-    background-color: rebeccapurple;
+    background-color: #d3ab1a;
     color: white;
     border-radius: 5px;
     font-weight: bold;
@@ -34,7 +29,7 @@
 }
 
 .buttonRegister:hover {
-    background-color: rgb(122, 88, 138);
+    background-color:#917c31;
     cursor: pointer;
 }
 input{
@@ -50,6 +45,6 @@ input{
 }
 .PRegist{
     
-    color: rgb(77, 1, 77);
+    color: white;
     margin-top: 10px;
 }
