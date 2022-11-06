@@ -1,0 +1,100 @@
+/* Whole design things */
+/* https://ibb.co/ys413d2 */
+body{
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-image: url("https://img.freepik.com/premium-photo/gradient-soft-cloudy-background-with-pastel-colors-luxury-purple-pink-white-gradient-decorative-background-web-template-festive-invitation-card-cover-presentation-banner-design_295890-2574.jpg");
+    display: flex;
+  
+    /* padding: 20px; */
+    height: 100px;
+    width:  100%;
+    margin-left:10px;
+    border-radius: 10px 10px 10px 10px;
+    margin: 0;
+    padding: 0;
+}
+/* 
+.logoImage {
+    margin: auto;
+    width: 5%;
+} */
+
+/* .logoImage:hover {
+    cursor: pointer;
+} */
+
+.nav-buttons {
+
+    width:100%;
+
+    justify-content:flex-end;
+    
+    font-size: large;
+    display: flex;
+    height: 100%;
+    text-align: center;
+    float:right;
+
+    
+
+}
+#left-button {
+
+    background-color: rgb(121, 223, 130);
+    height: 40%;
+    margin-top: 20px;
+    width: 100px;
+ 
+    color: rgb(69, 44, 85);
+    border-radius: 1px;
+    font-weight: bold;
+    font-size: 19px; /*текст больше в кнопке*/
+    
+    border-radius: 100px;
+   
+}
+#right-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(238, 81, 107);
+    height: 40%;
+    margin-top: 20px;
+    width: 100px;
+ 
+    color: rgb(78, 41, 102);
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 19px; /*текст больше в кнопке*/
+    
+    border-radius: 100px;
+}
+#left-button:hover {
+    background-color: rgb(62, 136, 124);
+    cursor: pointer;
+}
+#right-button:hover {
+    background-color: rgb(153, 5, 5);
+    cursor: pointer;
+}
+
+
+
+.footer {
+    background-color: #adadad;
+    text-align: center;
+    padding: 10px;
+}
+
+.H1MyForrum{
+    
+    width:100%;
+    justify-content:flex-end;
+    display:flex;
+    font-family:Andale Mono, monospace;
+    
+}

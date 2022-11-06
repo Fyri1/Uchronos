@@ -1,0 +1,40 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.7),
+        rgba(255, 255, 255, 0.3)
+      );
+      background-color: #3e4042;
+         
+      background-repeat: no-repeat;
+}
+.MainPage{
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.7),
+        rgba(255, 255, 255, 0.3)
+      ),
+      url("https://oir.mobi/uploads/posts/2021-03/1616538094_40-p-nezhno-fioletovii-fon-51.jpg");    /* background-image: 
+    background-repeat: no-repeat; */
+
+}
+.postPreview{
+
+    outline: 2px solid #000; /* Чёрная рамка */
+    background: rgb(146, 143, 150); /* Цвет фона */
+    width: 30%;
+    /* height: 170px; */
+    padding: 20px;
+
+    background-color: rebeccapurple;
+    color: white;
+    border-radius: 20px;
+   
+    margin-bottom: 5px;
+ 
+    justify-content: center;
+    font-family:Serif;
+    font-size: 20px;
+}
+
+
