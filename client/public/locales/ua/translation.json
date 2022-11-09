@@ -1,0 +1,54 @@
+{
+  "header": {},
+  "body": {
+    "login": {
+      "title": "Війти в аккаунт",
+      "btn-home": "Вернутися на головну",
+      "fields": {
+        "login": {
+          "title": "Логін",
+          "placeholder": "Введить логін"
+        },
+        "password": {
+          "title": "Пароль",
+          "placeholder": "Введіть пароль"
+        }
+      },
+      "forgot-pass": "Забув пароль",
+      "remember": "запам'ятати мене",
+      "no-account": "немає аккаунту?",
+      "register": "зареєструвати аккаунт"
+    },
+    "register": {
+      "title": "Зареєструвати аккаунт",
+      "btn-home": "Вернутися на головну",
+      "fields": {
+        "login": {
+          "title": "Логін",
+          "placeholder": "guest123"
+        },
+        "email": {
+          "title": "Електронна пошта",
+          "placeholder": "you@example.com"
+        },
+        "password": {
+          "title": "Пароль",
+          "placeholder": "qwerty123"
+        },
+        "comfirm-password": {
+          "title": "Повторний пароль",
+          "placeholder": "Введіть пароль знов"
+        }
+      },
+      "conditions": {
+        "item1": "Я приймаю",
+        "item2": "Правила та Умови"
+      },
+      "sing-in": {
+        "item1": "Вже маєте обліковий запис?",
+        "item2": "Залогінтесь"
+      }
+    }
+  },
+  "footer": {}
+}

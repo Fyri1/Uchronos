@@ -1,0 +1,54 @@
+{
+  "header": {},
+  "body": {
+    "login": {
+      "title": "Sing-in",
+      "btn-home": "Back to Home",
+      "fields": {
+        "login": {
+          "title": "Login",
+          "placeholder": "Enter login"
+        },
+        "password": {
+          "title": "Password",
+          "placeholder": "Enter password"
+        }
+      },
+      "forgot-pass": "forgot password",
+      "remember": "remember me",
+      "no-account": "no account?",
+      "register": "sing-up"
+    },
+    "register": {
+      "title": "Sing-up",
+      "btn-home": "Back to home",
+      "fields": {
+        "login": {
+          "title": "Login",
+          "placeholder": "guest123"
+        },
+        "email": {
+          "title": "Email",
+          "placeholder": "your@example.com"
+        },
+        "password": {
+          "title": "Password",
+          "placeholder": "qwerty123"
+        },
+        "comfirm-password": {
+          "title": "Password confirm",
+          "placeholder": "Enter password confirm"
+        }
+      },
+      "conditions": {
+        "item1": "I accept the",
+        "item2": "Terms and Conditions"
+      },
+      "sing-in": {
+        "item1": "Already have an account?",
+        "item2": "Sign in"
+      }
+    }
+  },
+  "footer": {}
+}
