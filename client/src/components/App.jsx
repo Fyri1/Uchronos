@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import MainPage from './main-page/MainPage.jsx';
 import io from 'socket.io-client';
 import Calendar from './Calendar.jsx';
 
@@ -43,6 +44,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Calendar />} />
+        <Route path="/clock" element={<MainPage />} />
       </Routes>
     </BrowserRouter>
   );
