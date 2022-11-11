@@ -3,7 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MainPage from './main-page/MainPage.jsx';
 import io from 'socket.io-client';
-import Calendar from './Calendar.jsx';
+import Calendar from './main-page/Calendar.jsx';
+import Login from './auth-components/Login.jsx';
+import Register from './auth-components/Register.jsx';
 
 const lngs = {
   en: {
@@ -45,6 +47,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Calendar />} />
         <Route path="/clock" element={<MainPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,150 +1,168 @@
-import React, { useEffect } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import '../css-files/Login.css'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Link from '@mui/material/Link';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-function Login() {
+const validationLogin = yup.object({
+  login: yup.string().required('Login is required').trim('Cannot be blank'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .trim('Cannot be blank'),
+});
+
+const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const [login, setLogin] =React.useState('');
-  const [password, setPassword] = React.useState('');
+  const formik = useFormik({
+    initialValues: {
+      login: '',
+      password: '',
+      remember: false,
+    },
+    validationSchema: validationLogin,
+    validateOnChange: false,
+    validateOnBlur: false,
+    onSubmit: async (values) => {
+      setLoading(true);
+      console.log(values);
+    },
+  });
 
-  const [loginDirty, setLoginDirty]= React.useState(false);
-  const [loginError, setLoginError]= React.useState('Login cannot be empty!');
-  const [passwordDirty, setPasswordDirty]= React.useState(false);
-  const [passwordError, setPasswordError]= React.useState('Password cannot be empty!');
-  const [formValid, setFormValid] = React.useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
-  const [responseErrors, setResponseErrors] = React.useState({});
-
-  const reqBody={
-    login: login,
-    password: password
-  }
-
-
-  const blurHandler = (e) => {
-    switch (e.target.name)
-    {
-      case 'login':
-        setLoginDirty(true)
-        break
-      case 'password':
-        setPasswordDirty(true)
-        break
-    }
-
-  }
-
-  const LoginHandler = (e) =>{
-    setLogin(e.target.value)
-    if(e.target.value.length < 3  )
-    {
-      setLoginError("Password must be longer!")
-      if(!e.target.value)
-      {
-        setLoginError("Password cannot be empty!")
-      }
-    }
-    else {
-      setLoginError("")
-    }
-  }
-
-  const PasswordHandler = (e) =>{
-    setPassword(e.target.value)
-    if(e.target.value.length < 3  )
-    {
-      setPasswordError("Password must be longer!")
-      if(!e.target.value)
-      {
-        setPasswordError("Password cannot be empty!")
-      }
-    }
-    else {
-      setPasswordError("")
-    }
-  }
-
-
-  const handleLogin = async() =>{
-    try{
-      const result = await axios.post("http://localhost:8080/api/auth/login",reqBody)
-      console.log(result)
-      localStorage.setItem("token", result.data.token);
-      localStorage.setItem("id", result.data.id);
-
-      if (result.status === 200) {
-        navigate("/");
-      }
-    }
-    catch (err){
-      console.log(err);
-      setResponseErrors(() => {
-        return err;
-      });
-    }
-
-  }
-
-  useEffect( ()=> {
-    if (loginError || passwordError){
-      setFormValid(false)
-    }else{
-      setFormValid(true)
-    }
-  })
-
-  //---------button--------------
-  // const [responseErrors, setResponseErrors] = React.useState({});
-  // async function LogoutUser () {
-  //   try
-  //   {
-  //       const response =  navigate("/login");
-  //   } 
-  //   catch (err){
-  //       console.log(err);
-  //       setResponseErrors(() => {
-  //           return err;
-  //       });
-  //   }
-  // }
-
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   return (
-    <div className="login">
-       <form >
-        <h1 className="H1Login">Login</h1>
-        <div className="LoginTextLogin">
-          <p className="userNameP">User name</p>
-
-          {(loginDirty && loginError) && <div style={{color:'red'}}>{loginError} </div>}
-
-          <input  name="login" className="inputBoxLogin" placegolder= 'Enter login'
-            onChange={(e) => LoginHandler(e)} onBlur={e =>blurHandler(e)} 
-            value={login}/>
-
+    <form
+      onSubmit={formik.handleSubmit}
+      className="bg-gray-50 dark:bg-gray-900"
+    >
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              Sign in to your account
+            </h1>
+            <div className="">
+              <TextField
+                id="login"
+                label="Login"
+                name="login"
+                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                onChange={formik.handleChange}
+                value={formik.values.login}
+                error={Boolean(formik.errors?.login)}
+                helperText={formik.errors?.login ? formik.errors.login : null}
+              />
+            </div>
+            <FormControl
+              variant="outlined"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600  dark:text-white"
+            >
+              <InputLabel
+                htmlFor="outlined-adornment-password"
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+              >
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                error={Boolean(formik.errors.password)}
+                label="Password"
+              />
+              <FormHelperText error={Boolean(formik.errors.password)}>
+                {formik.errors?.password ? formik.errors.password : null}
+              </FormHelperText>
+            </FormControl>
+            <div className="flex items-center justify-between">
+              <div className="flex items-start">
+                <div className="flex items-center h-5">
+                  <Checkbox
+                    id="remember"
+                    name="remember"
+                    onChange={formik.handleChange}
+                    value={formik.values.remember}
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label
+                    htmlFor="remember"
+                    className="text-gray-500 dark:text-gray-300"
+                  >
+                    Remember me
+                  </label>
+                </div>
+              </div>
+              <Link
+                href="#"
+                underline="hover"
+                className="text-sm font-medium text-primary-600 dark:text-primary-500"
+              >
+                Forgot password?
+              </Link>
+            </div>
+            <LoadingButton
+              className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              variant="contained"
+              loading={loading}
+              type="submit"
+            >
+              Sing in
+            </LoadingButton>
+            <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+              Don't have an account yet?{' '}
+              <Link
+                href="#"
+                underline="hover"
+                className="font-medium text-primary-600 dark:text-primary-500"
+              >
+                Sign up
+              </Link>
+            </p>
+          </div>
         </div>
-
-      
-        
-        <div className="PasswordTextLogin"></div>
-        <p className="userNameP">Password</p>
-
-        {(passwordDirty && passwordError) && <div style={{color:'red'}}>{passwordError} </div>}
-
-        <input name="password" className="inputBoxLogin" placegolder= 'Enter Password'
-          onChange={(e) => PasswordHandler(e)} onBlur={e =>blurHandler(e)} 
-          
-          value={password}/>
-     
-      <button disabled ={!formValid} onClick={handleLogin} className="appButtonLogin" type="button">Login</button>
-      </form>
-     
-    </div>
+      </div>
+    </form>
   );
-
-}
+};
 
 export default Login;
