@@ -4,13 +4,14 @@ import App from './components/App.jsx';
 import store from './slices/index.js';
 import { Provider } from 'react-redux';
 import './input.css';
+import './i18next.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <React.Suspense fullback="loading">
-      {/* <Provider store={store}> */}
+      <Provider store={store}>
         <App />
-      {/* </Provider> */}
+      </Provider>
     </React.Suspense>
   </React.StrictMode>
 );

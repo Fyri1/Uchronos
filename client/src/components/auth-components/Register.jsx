@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import DataUpUser from './DataUpUser.jsx';
 
 import axios from 'axios';
 

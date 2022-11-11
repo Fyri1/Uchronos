@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -15,19 +15,25 @@ import FormControl from '@mui/material/FormControl';
 import Link from '@mui/material/Link';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import LanguageContext from '../../contex/languageContext.js';
 
-const validationLogin = yup.object({
-  login: yup.string().required('Login is required').trim('Cannot be blank'),
-  password: yup
-    .string()
-    .required('Password is required')
-    .trim('Cannot be blank'),
-});
+const getSchemeValidationLogin = (t) => {
+  return yup.object({
+    login: yup
+      .string()
+      .required(t('body.login.fields.login.error.required'))
+      .trim(),
+    password: yup
+      .string()
+      .required(t('body.login.fields.password.error.required'))
+      .trim(),
+  });
+};
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const { t } = useContext(LanguageContext);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -36,7 +42,7 @@ const Login = () => {
       password: '',
       remember: false,
     },
-    validationSchema: validationLogin,
+    validationSchema: getSchemeValidationLogin(t),
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: async (values) => {
@@ -62,20 +68,18 @@ const Login = () => {
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-              Sign in to your account
+              {t('body.login.title')}
             </h1>
-            <div className="">
-              <TextField
-                id="login"
-                label="Login"
-                name="login"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                onChange={formik.handleChange}
-                value={formik.values.login}
-                error={Boolean(formik.errors?.login)}
-                helperText={formik.errors?.login ? formik.errors.login : null}
-              />
-            </div>
+            <TextField
+              id="login"
+              label={t('body.login.fields.login.label')}
+              name="login"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              onChange={formik.handleChange}
+              value={formik.values.login}
+              error={Boolean(formik.errors?.login)}
+              helperText={formik.errors?.login ? formik.errors.login : null}
+            />
             <FormControl
               variant="outlined"
               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600  dark:text-white"
@@ -86,7 +90,7 @@ const Login = () => {
                   formik.touched.password && Boolean(formik.errors.password)
                 }
               >
-                Password
+                {t('body.login.fields.password.label')}
               </InputLabel>
               <OutlinedInput
                 id="password"
@@ -107,7 +111,7 @@ const Login = () => {
                   </InputAdornment>
                 }
                 error={Boolean(formik.errors.password)}
-                label="Password"
+                label={t('body.login.fields.password.label')}
               />
               <FormHelperText error={Boolean(formik.errors.password)}>
                 {formik.errors?.password ? formik.errors.password : null}
@@ -123,12 +127,12 @@ const Login = () => {
                     value={formik.values.remember}
                   />
                 </div>
-                <div className="ml-3 text-sm">
+                <div className="text-sm">
                   <label
                     htmlFor="remember"
                     className="text-gray-500 dark:text-gray-300"
                   >
-                    Remember me
+                    {t('body.login.remember')}
                   </label>
                 </div>
               </div>
@@ -137,7 +141,7 @@ const Login = () => {
                 underline="hover"
                 className="text-sm font-medium text-primary-600 dark:text-primary-500"
               >
-                Forgot password?
+                {t('body.login.forgot-pass')}
               </Link>
             </div>
             <LoadingButton
@@ -146,16 +150,16 @@ const Login = () => {
               loading={loading}
               type="submit"
             >
-              Sing in
+              {t('body.login.btn-login')}
             </LoadingButton>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-              Don't have an account yet?{' '}
+              {t('body.login.no-account')}{' '}
               <Link
                 href="#"
                 underline="hover"
                 className="font-medium text-primary-600 dark:text-primary-500"
               >
-                Sign up
+                {t('body.login.register')}
               </Link>
             </p>
           </div>

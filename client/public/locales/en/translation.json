@@ -2,22 +2,26 @@
   "header": {},
   "body": {
     "login": {
-      "title": "Sing-in",
-      "btn-home": "Back to Home",
+      "title": "Sign in to your account",
+      "forgot-pass": "Forgot password",
+      "no-account": "Don't have an account yet?",
+      "register": "Sign up",
+      "remember": "Remember me",
+      "btn-login": "Sign in",
       "fields": {
         "login": {
-          "title": "Login",
-          "placeholder": "Enter login"
+          "label": "Login",
+          "error": {
+            "required": "Login is required"
+          }
         },
         "password": {
-          "title": "Password",
-          "placeholder": "Enter password"
+          "label": "Password",
+          "error": {
+            "required": "Password is required"
+          }
         }
-      },
-      "forgot-pass": "forgot password",
-      "remember": "remember me",
-      "no-account": "no account?",
-      "register": "sing-up"
+      }
     },
     "register": {
       "title": "Sing-up",

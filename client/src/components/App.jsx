@@ -6,6 +6,7 @@ import io from 'socket.io-client';
 import Calendar from './main-page/Calendar.jsx';
 import Login from './auth-components/Login.jsx';
 import Register from './auth-components/Register.jsx';
+import LanguageContext from '../contex/languageContext.js';
 
 const lngs = {
   en: {
@@ -43,14 +44,16 @@ const App = () => {
   });
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Calendar />} />
-        <Route path="/clock" element={<MainPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </BrowserRouter>
+    <LanguageContext.Provider value={{ t }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Calendar />} />
+          <Route path="/clock" element={<MainPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </BrowserRouter>
+    </LanguageContext.Provider>
   );
 };
 
