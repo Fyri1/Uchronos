@@ -17,12 +17,21 @@ export default () => {
   const io = new Server(createSocketServer, {
     cors: {
       origin: 'http://127.0.0.1:5173',
+      // origin: '*',
       methods: ['GET', 'POST'],
     },
   });
+
   io.on('connection', (socket) => {
     console.log(socket.id);
   });
+
+  const socketMiddleware = (req, res, next) => {
+    req.io = io;
+    next();
+  };
+
+  app.get('/', (req, res) => {});
   app.use(cookieParser());
   app.use(cors());
   app.use(morgan('dev'));
@@ -30,7 +39,7 @@ export default () => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use('/avatars', Express.static(`${path.resolve()}/avatars`));
   app.use('/picture-post', Express.static(`${path.resolve()}/picture-post`));
-  app.use('/api', router);
+  app.use('/api', socketMiddleware, router);
   app.use(errorMiddleware);
   return createSocketServer;
 };

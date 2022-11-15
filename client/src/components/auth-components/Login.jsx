@@ -16,6 +16,7 @@ import Link from '@mui/material/Link';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LanguageContext from '../../contex/languageContext.js';
+import { StyledEngineProvider } from '@mui/material/styles';
 
 const getSchemeValidationLogin = (t) => {
   return yup.object({
@@ -74,7 +75,7 @@ const Login = () => {
               id="login"
               label={t('body.login.fields.login.label')}
               name="login"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               onChange={formik.handleChange}
               value={formik.values.login}
               error={Boolean(formik.errors?.login)}
@@ -82,7 +83,7 @@ const Login = () => {
             />
             <FormControl
               variant="outlined"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600  dark:text-white"
+              className="w-full bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block dark:bg-gray-700 dark:border-gray-600  dark:text-white"
             >
               <InputLabel
                 htmlFor="outlined-adornment-password"
@@ -145,7 +146,7 @@ const Login = () => {
               </Link>
             </div>
             <LoadingButton
-              className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              className="w-full text-white bg-primary-600  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               variant="contained"
               loading={loading}
               type="submit"
@@ -155,7 +156,7 @@ const Login = () => {
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               {t('body.login.no-account')}{' '}
               <Link
-                href="#"
+                href="/register"
                 underline="hover"
                 className="font-medium text-primary-600 dark:text-primary-500"
               >

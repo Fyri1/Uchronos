@@ -127,22 +127,27 @@ class Authorization {
   async authActiveEmail(req, res, next) {
     try {
       const { link } = req.params;
+      console.log(link);
       const user = await User.initUser('link_event', link);
       if (user.active) {
+        req.io.emit('email', { failed: true, validLink: false });
         next(ApiError.ActiveEmail('You have already activated your email'));
         return;
       }
       if (!(Date.now() - new Date(user.created_at).getTime() < 8356586)) {
+        req.io.emit('email', { failed: false, validLink: true });
         next(ApiError.TokenKiller());
         return;
       }
       await User.setActive(user.id);
       await User.deleteLink(user.id);
+      req.io.emit('email', { failed: false, validLink: false });
       res.status(201);
       res.json({
         massage: 'gmail active, thanks for creating account',
       });
     } catch (err) {
+      req.io.emit('email', { failed: false, validLink: true });
       next(err);
     }
   }

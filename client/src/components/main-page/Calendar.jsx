@@ -3,39 +3,12 @@ import '@fullcalendar/react/dist/vdom';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import { INITIAL_EVENTS, createEventId } from '../../utils/event-utils.js';
 
-// const renderSidebar = () => {
-//   return (
-//     <div className="demo-app-sidebar">
-//       <div className="demo-app-sidebar-section">
-//         <h2>Instructions</h2>
-//         <ul>
-//           <li>Select dates and you will be prompted to create a new event</li>
-//           <li>Drag, drop, and resize events</li>
-//           <li>Click an event to delete it</li>
-//         </ul>
-//       </div>
-//       <div className="demo-app-sidebar-section">
-//         <label>
-//           <input
-//             type="checkbox"
-//             checked={this.state.weekendsVisible}
-//             onChange={this.handleWeekendsToggle}
-//           ></input>
-//           toggle weekends
-//         </label>
-//       </div>
-//       <div className="demo-app-sidebar-section">
-//         <h2>All Events ({this.state.currentEvents.length})</h2>
-//         <ul>{this.state.currentEvents.map(renderSidebarEvent)}</ul>
-//       </div>
-//     </div>
-//   );
-// };
-
 const handleDateSelect = (selectInfo) => {
+  console.log(selectInfo);
   let title = prompt('Please enter a new title for your event');
   let calendarApi = selectInfo.view.calendar;
 
@@ -53,6 +26,7 @@ const handleDateSelect = (selectInfo) => {
 };
 
 const handleEventClick = (clickInfo) => {
+  console.log(clickInfo);
   if (
     confirm(
       `Are you sure you want to delete the event '${clickInfo.event.title}'`
@@ -63,6 +37,7 @@ const handleEventClick = (clickInfo) => {
 };
 
 const renderEventContent = (eventInfo) => {
+  console.log(eventInfo);
   return (
     <>
       <b>{eventInfo.timeText}</b>
@@ -102,20 +77,36 @@ const Calendar = () => {
     });
   };
 
-  console
-    .log
-    //   this.state.currentEvents[0] ? this.state.currentEvents[0]._instance.range.start : null
-    ();
+  const views = {
+    timelineCustom: {
+      type: 'timeline',
+      buttonText: 'Year',
+      dateIncrement: { years: 1 },
+      slotDuration: { months: 1 },
+      visibleRange: function (currentDate) {
+        return {
+          start: currentDate.clone().startOf('year'),
+          end: currentDate.clone().endOf('year'),
+        };
+      },
+    },
+  };
+
   return (
-    <div className="demo-app h-4/6">
+    <div className="demo-app ">
       {/* {renderSidebar()} */}
       <div className="demo-app-main">
         <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          plugins={[
+            dayGridPlugin,
+            timeGridPlugin,
+            interactionPlugin,
+            listPlugin,
+          ]}
           headerToolbar={{
             left: 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+            right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
           }}
           initialView="dayGridMonth"
           editable={true}

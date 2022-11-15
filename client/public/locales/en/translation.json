@@ -24,24 +24,34 @@
       }
     },
     "register": {
-      "title": "Sing-up",
-      "btn-home": "Back to home",
+      "title": "Create and account",
+      "btn-register": "Create account",
       "fields": {
         "login": {
-          "title": "Login",
-          "placeholder": "guest123"
+          "label": "Login",
+          "error": {
+            "required": "Login is required"
+          }
         },
         "email": {
-          "title": "Email",
-          "placeholder": "your@example.com"
+          "label": "Email",
+          "error": {
+            "required": "Email is required",
+            "email": "The email is not a valid email address."
+          }
         },
         "password": {
-          "title": "Password",
-          "placeholder": "qwerty123"
+          "label": "Password",
+          "error": {
+            "required": "Password is required"
+          }
         },
         "comfirm-password": {
-          "title": "Password confirm",
-          "placeholder": "Enter password confirm"
+          "label": "Password confirm",
+          "error": {
+            "required": "Password confirm is required",
+            "no-match": "Password do not match"
+          }
         }
       },
       "conditions": {
@@ -52,6 +62,21 @@
         "item1": "Already have an account?",
         "item2": "Sign in"
       }
+    },
+    "comfirm-email": {
+      "invalid-token": {
+        "title": "Invalid token",
+        "text": "The token has expired, this happened because you did not follow the link in the mail at the right time, please register again"
+      },
+      "failed": {
+        "title": "The mail has already been confirmed",
+        "text": "Looks like you have already confirmed your mail, so you can use page"
+      },
+      "comfirm": {
+        "title": "Comfirmed",
+        "text": "Thank you for registering on our site, now you can create your posts, like and comment!\nI hope you will cooperate with us, good use of our Usof Forym:)"
+      },
+      "developer": { "name": "Team Donbass Go", "profession": "UI DEVELOPERS" }
     }
   },
   "footer": {}
