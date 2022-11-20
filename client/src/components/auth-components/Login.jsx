@@ -37,7 +37,7 @@ const Login = () => {
   const { t } = useContext(LanguageContext);
   const navigate = useNavigate();
 
-  const formik = useFormik({
+  const formik = useFormik({ //  обработчик формы 
     initialValues: {
       login: '',
       password: '',
@@ -46,9 +46,9 @@ const Login = () => {
     validationSchema: getSchemeValidationLogin(t),
     validateOnChange: false,
     validateOnBlur: false,
-    onSubmit: async (values) => {
+    onSubmit: async (values) => { //сробатываине после нажатия кнопки  
       setLoading(true);
-      console.log(values);
+      console.log(values);// мои данные обратобатиь и отрпавить на сервер спосощью аксиос и так все остальные 
     },
   });
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Header from './HeadUser.jsx';
+import MainButtons from './MainButtons.jsx';
 import '../css-files/MainPage.css';
 import clock from '../css-files/script.js';
 const MainPage = () => {
@@ -9,7 +9,7 @@ const MainPage = () => {
 
   return (
     <div className="MainPage">
-      <Header />
+      <MainButtons />
       <div className="MainPage_сlock">
         <div class="clock">
           <div class="hour">

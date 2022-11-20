@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import '../css-files/Header.css';
 
-function Header() {
+function MainButtons() {
   const [responseErrors, setResponseErrors] = React.useState({});
   const navigate = useNavigate();
 
@@ -131,4 +131,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default MainButtons;

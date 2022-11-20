@@ -10,6 +10,7 @@ import LanguageContext from '../contex/languageContext.js';
 import SocketContext from '../contex/socketContext.js';
 import ModalsContext from '../contex/modalsContext.js';
 import ComfirmEmail from './auth-components/ComfirmEmail.jsx';
+import Header from './main-page/Header.jsx';
 
 const lngs = {
   en: {
@@ -54,13 +55,16 @@ const App = () => {
     <ModalsContext.Provider value={{ anchorEl, setAnchorEl }}>
       <LanguageContext.Provider value={{ t }}>
         <SocketContext.Provider value={{ socket }}>
+        
           <BrowserRouter>
+          <Header/>
             <Routes>
               <Route path="/" element={<Calendar />} />
               <Route path="/clock" element={<MainPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/comfirm-email" element={<ComfirmEmail />} />
+              
             </Routes>
           </BrowserRouter>
         </SocketContext.Provider>

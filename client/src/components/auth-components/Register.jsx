@@ -53,7 +53,7 @@ const Register = () => {
       email: '',
       login: '',
       password: '',
-      comfirmPassword: '',
+      passwordConfirm: '',
       terms: false,
     },
     validationSchema: getSchemeValidationLogin(t),
@@ -61,6 +61,7 @@ const Register = () => {
     validateOnBlur: false,
     onSubmit: async (values) => {
       setLoading(true);
+      console.log(values)
     },
   });
 
