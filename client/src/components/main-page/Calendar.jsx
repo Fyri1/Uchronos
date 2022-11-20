@@ -1,32 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import '@fullcalendar/react/dist/vdom';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
-import { INITIAL_EVENTS, createEventId } from '../../utils/event-utils.js';
+import { INITIAL_EVENTS } from '../../utils/event-utils.js';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+import ModalsContext from '../../contex/modalsContext.js';
+import EventModal from '../modals/EventModal.jsx';
 
-const handleDateSelect = (selectInfo) => {
-  console.log(selectInfo);
-  let title = prompt('Please enter a new title for your event');
-  let calendarApi = selectInfo.view.calendar;
-
-  calendarApi.unselect(); // clear date selection
-
-  if (title) {
-    calendarApi.addEvent({
-      id: createEventId(),
-      title,
-      start: selectInfo.startStr,
-      end: selectInfo.endStr,
-      allDay: selectInfo.allDay,
-    });
-  }
+const handleDateSelect = async (selectInfo) => {
+  // let title = prompt('Please enter a new title for your event');
+  // let calendarApi = selectInfo.view.calendar;
+  // console.log(selectInfo.view);
+  // calendarApi.unselect(); // clear date selection
+  // if (title) {
+  //   const initialEvents = {
+  //     id: uuidv4(),
+  //     title,
+  //     start: selectInfo.startStr,
+  //     end: selectInfo.endStr,
+  //     allDay: selectInfo.allDay,
+  //     backgroundColor: 'red',
+  //   };
+  //   calendarApi.addEvent(initialEvents);
+  //   await axios.post('http://localhost:8080/api/calendar/event', initialEvents);
+  // }
 };
 
 const handleEventClick = (clickInfo) => {
-  console.log(clickInfo);
+  console.log(clickInfo.event._context.getCurrentData());
   if (
     confirm(
       `Are you sure you want to delete the event '${clickInfo.event.title}'`
@@ -37,7 +42,7 @@ const handleEventClick = (clickInfo) => {
 };
 
 const renderEventContent = (eventInfo) => {
-  console.log(eventInfo);
+  // console.log(eventInfo);
   return (
     <>
       <b>{eventInfo.timeText}</b>
@@ -66,6 +71,7 @@ const Calendar = () => {
     weekendsVisible: true,
     currentEvents: [],
   });
+  const { setAnchorEl } = useContext(ModalsContext);
   const handleWeekendsToggle = () => {
     setState({
       weekendsVisible: !weekendsVisible,
@@ -96,6 +102,7 @@ const Calendar = () => {
     <div className="demo-app ">
       {/* {renderSidebar()} */}
       <div className="demo-app-main">
+        <EventModal />
         <FullCalendar
           plugins={[
             dayGridPlugin,
@@ -115,7 +122,11 @@ const Calendar = () => {
           dayMaxEvents={true}
           weekends={state.weekendsVisible}
           initialEvents={INITIAL_EVENTS}
-          select={handleDateSelect}
+          select={(selectInfo) => {
+            handleDateSelect(selectInfo);
+            console.log(selectInfo.jsEvent.target);
+            setAnchorEl(selectInfo.jsEvent.target);
+          }}
           eventContent={renderEventContent}
           eventClick={handleEventClick}
           eventsSet={handleEvents}

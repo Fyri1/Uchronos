@@ -8,6 +8,7 @@ import Login from './auth-components/Login.jsx';
 import Register from './auth-components/Register.jsx';
 import LanguageContext from '../contex/languageContext.js';
 import SocketContext from '../contex/socketContext.js';
+import ModalsContext from '../contex/modalsContext.js';
 import ComfirmEmail from './auth-components/ComfirmEmail.jsx';
 
 const lngs = {
@@ -22,6 +23,7 @@ const lngs = {
 const socket = io('http://localhost:8080');
 const App = () => {
   const { t, i18n } = useTranslation();
+  const [anchorEl, setAnchorEl] = useState(null);
   useEffect(() => {
     socket.on('connection', () => console.log(socket.id));
   }, []);
@@ -49,19 +51,21 @@ const App = () => {
   });
 
   return (
-    <LanguageContext.Provider value={{ t }}>
-      <SocketContext.Provider value={{ socket }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Calendar />} />
-            <Route path="/clock" element={<MainPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/comfirm-email" element={<ComfirmEmail />} />
-          </Routes>
-        </BrowserRouter>
-      </SocketContext.Provider>
-    </LanguageContext.Provider>
+    <ModalsContext.Provider value={{ anchorEl, setAnchorEl }}>
+      <LanguageContext.Provider value={{ t }}>
+        <SocketContext.Provider value={{ socket }}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Calendar />} />
+              <Route path="/clock" element={<MainPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/comfirm-email" element={<ComfirmEmail />} />
+            </Routes>
+          </BrowserRouter>
+        </SocketContext.Provider>
+      </LanguageContext.Provider>
+    </ModalsContext.Provider>
   );
 };
 

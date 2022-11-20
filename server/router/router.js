@@ -1,6 +1,7 @@
 import Express from 'express';
 import { body } from 'express-validator';
 import Users from '../controller/users-controller.js';
+import Calendar from '../controller/calendar-controller.js';
 import Authorization from '../controller/authentication-controller.js';
 import TokenService from '../service/token-service.js';
 import checkValidation from '../middlewares/check-validation.js';
@@ -37,5 +38,7 @@ router.post(
 );
 router.get('/auth/refresh', Authorization.refreshToken);
 router.get('/auth/confirm-email/:link', Authorization.authActiveEmail);
+
+router.post('/calendar/event', Calendar.addEventCalendar);
 
 export default router;
