@@ -10,7 +10,7 @@ export default class ApiError extends Error {
   }
 
   static TokenKiller(massage, errors = []) {
-    return new ApiError(422, massage, errors);
+    return new ApiError(401, massage, errors);
   }
 
   static UnauthorizedError() {
@@ -32,7 +32,7 @@ export default class ApiError extends Error {
   static UnknowUser(message, errors = []) {
     return new ApiError(422, message, errors);
   }
-  
+
   static IncorrectData(message, errors = []) {
     return new ApiError(422, message, errors);
   }
