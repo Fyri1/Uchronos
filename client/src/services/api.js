@@ -4,13 +4,14 @@ import axios from 'axios';
 const JWTToken = localStorage.getItem('jwt');
 const BASE_URL = 'http://localhost:8080';
 // Создать инстанс axios
-const api = axios.create({
+const $api = axios.create({
   baseURL: `${BASE_URL}/api`,
+  withCredentials: true,
 });
 
 function apiSetHeader(name, value) {
   if (value) {
-    api.defaults.headers[name] = value;
+    $api.defaults.headers[name] = value;
   }
 }
 
@@ -19,21 +20,35 @@ if (JWTToken) {
   apiSetHeader('Authorization', `Bearer ${JWTToken}`);
 }
 
-api.interceptors.request.use(
+$api.interceptors.request.use(
   (config) => {
-    // Если пользователь делает запрос и у него нет заголовка с токеном, то...
-    // if (!config?.defaults.headers['Authorization']) {
-    //   console.log('redirect');
-    //   return;
-    // }
-
     return config;
   },
   (error) => {
     return Promise.reject(error);
   }
 );
+$api.interceptors.response.use(
+  (config) => {
+    return config;
+  },
+  async (error) => {
+    const originalRequest = error.config;
 
-export default api;
+    if (error.response.status === 401) {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/auth/refresh`, {
+          withCredentials: true,
+        });
+        localStorage.setItem('jwt', response.data.accessToken);
+        return $api.request(originalRequest);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+);
+
+export default $api;
 
 export { apiSetHeader };
