@@ -43,7 +43,6 @@ const usersSlice = createSlice({
         state.entities[payload.id] = payload;
       })
       .addCase(fetchUserInfo.rejected, (state, action) => {
-        console.log(action);
         state.isLogin = false;
         state.error = action.error;
       })
