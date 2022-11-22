@@ -17,8 +17,8 @@ export default () => {
   const io = new Server(createSocketServer, {
     cors: {
       origin: 'http://127.0.0.1:5173',
-      // origin: '*',
       methods: ['GET', 'POST'],
+      credentials: true,
     },
   });
 
@@ -26,14 +26,27 @@ export default () => {
     console.log(socket.id);
   });
 
-  const socketMiddleware = (req, res, next) => {
+  const socketMiddleware = (req, _res, next) => {
     req.io = io;
     next();
   };
 
-  app.get('/', (req, res) => {});
+  // app.use(function (_req, res, next) {
+  //   res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:5173');
+  //   res.header('Access-Control-Allow-Credentials', true);
+  //   res.header(
+  //     'Access-Control-Allow-Headers',
+  //     'Origin, X-Requested-With, Content-Type, Accept'
+  //   );
+  //   next();
+  // });
   app.use(cookieParser());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: 'http://127.0.0.1:5173',
+      credentials: true,
+    })
+  );
   app.use(morgan('dev'));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
