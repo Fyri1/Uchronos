@@ -1,7 +1,16 @@
+import ApiError from '../exceptions/api-error.js';
+import TokenService from '../service/token-service.js';
+
 class Calendar {
   addEventCalendar(req, res, next) {
-    console.log(req.body); // название ивента, дата( на весь дениь или на промедуток), цвет должен быть , начало и конец 
-    res.end('OK');//ok
+    const token = req.headers.authorization.split(' ')[1];
+    try {
+      TokenService.validateAccessToken(token);
+      console.log(req.body);
+      res.end('OK');
+    } catch (e) {
+      next(e);
+    }
   }
 }
 
