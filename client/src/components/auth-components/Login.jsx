@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import $api, { apiSetHeader } from '../../services/api.js';
+import routes from '../../routes.js';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -37,7 +38,8 @@ const Login = () => {
   const { t } = useContext(LanguageContext);
   const navigate = useNavigate();
 
-  const formik = useFormik({ //  обработчик формы 
+  const formik = useFormik({
+    //  обработчик формы
     initialValues: {
       login: '',
       password: '',
@@ -46,9 +48,19 @@ const Login = () => {
     validationSchema: getSchemeValidationLogin(t),
     validateOnChange: false,
     validateOnBlur: false,
-    onSubmit: async (values) => { //сробатываине после нажатия кнопки  
+    onSubmit: async (values) => {
+      //сробатываине после нажатия кнопки
       setLoading(true);
-      console.log(values);// мои данные обратобатиь и отрпавить на сервер спосощью аксиос и так все остальные 
+      try {
+        const { data } = await $api.post(routes.loginPath(), values);
+        localStorage.setItem('jwt', data.accessToken);
+        apiSetHeader('Authorization', `Bearer ${data.accessToken}`);
+        setLoading(false);
+        navigate('/');
+      } catch (error) {
+        setLoading(false);
+        formik.errors.login = error.response.data.message;
+      }
     },
   });
 
