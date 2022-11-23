@@ -67,6 +67,9 @@ class Authorization {
   }
   async authLogout(req, res, next) {
     const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+      return res.status(401).end('GG');
+    }
     try {
       const user = TokenService.validateRefreshToken(refreshToken);
       await Token.deleteToken('user_id', user.id);
@@ -153,6 +156,7 @@ class Authorization {
   }
   async refreshToken(req, res, next) {
     const { refreshToken } = req.cookies;
+    console.log(refreshToken);
     if (!refreshToken) {
       next(ApiError.UnauthorizedError());
       return;

@@ -56,7 +56,7 @@ const Login = () => {
         localStorage.setItem('jwt', data.accessToken);
         apiSetHeader('Authorization', `Bearer ${data.accessToken}`);
         setLoading(false);
-        navigate('/');
+        window.location.href = '/';
       } catch (error) {
         setLoading(false);
         formik.errors.login = error.response.data.message;

@@ -11,6 +11,7 @@ import SocketContext from '../contex/socketContext.js';
 import ModalsContext from '../contex/modalsContext.js';
 import ComfirmEmail from './auth-components/ComfirmEmail.jsx';
 import Header from './main-page/Header.jsx';
+import Spinner from './extentions/Spinner.jsx';
 
 const lngs = {
   en: {
@@ -23,18 +24,15 @@ const lngs = {
 
 const socket = io('http://localhost:8080');
 const App = () => {
+  const [isGuest, setGuest] = useState(false);
+  const [isLoad, setLoad] = useState(true);
   const { t, i18n } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   useEffect(() => {
     socket.on('connection', () => console.log(socket.id));
+    !localStorage.getItem('jwt') ? setGuest(true) : setGuest(false);
+    setLoad(false);
   }, []);
-  if (!localStorage.getItem('currentUser')) {
-    localStorage.setItem(
-      'currentUser',
-      JSON.stringify({ currentUser: 'guest' })
-    );
-  }
-
   const buttonTranslate = Object.keys(lngs).map((lng) => {
     return (
       <button
@@ -51,20 +49,25 @@ const App = () => {
     );
   });
 
-  return (
+  return isLoad ? (
+    <Spinner />
+  ) : (
     <ModalsContext.Provider value={{ anchorEl, setAnchorEl }}>
       <LanguageContext.Provider value={{ t }}>
         <SocketContext.Provider value={{ socket }}>
-        
           <BrowserRouter>
-          <Header/>
+            {isGuest ? null : <Header />}
             <Routes>
-              <Route path="/" element={<Calendar />} />
-              <Route path="/clock" element={<MainPage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/comfirm-email" element={<ComfirmEmail />} />
-              
+              {isGuest ? (
+                <>
+                  <Route path="/" element={<MainPage />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/comfirm-email" element={<ComfirmEmail />} />
+                </>
+              ) : (
+                <Route path="/" element={<Calendar />} />
+              )}
             </Routes>
           </BrowserRouter>
         </SocketContext.Provider>
