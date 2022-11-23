@@ -10,7 +10,7 @@ import checkAccessDenied from '../middlewares/check-access-enied.js';
 const router = Express.Router();
 
 router.post(
-  '/auth/register/',
+  '/register/',
   body('login').isLength({ min: 3, max: 30 }).trim(),
   body('password').isLength({ min: 6 }).trim(),
   body('passwordConfirm').isLength({ min: 6 }).trim(),
@@ -39,6 +39,5 @@ router.post(
 router.get('/auth/refresh', Authorization.refreshToken);
 router.get('/auth/confirm-email/:link', Authorization.authActiveEmail);
 
-router.post('/calendar/event', Calendar.addEventCalendar);
 
 export default router;
