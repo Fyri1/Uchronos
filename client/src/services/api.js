@@ -28,6 +28,7 @@ $api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 $api.interceptors.response.use(
   (config) => {
     return config;
@@ -46,6 +47,7 @@ $api.interceptors.response.use(
         console.log(err);
       }
     }
+    throw error;
   }
 );
 
