@@ -76,31 +76,13 @@ const Calendar = () => {
     currentEvents: [],
   });
   const { setAnchorEl } = useContext(ModalsContext);
-  const handleWeekendsToggle = () => {
-    setState({
-      weekendsVisible: !weekendsVisible,
-    });
-  };
+  
   const handleEvents = (events) => {
     setState({
       currentEvents: events,
     });
   };
 
-  const views = {
-    timelineCustom: {
-      type: 'timeline',
-      buttonText: 'Year',
-      dateIncrement: { years: 1 },
-      slotDuration: { months: 1 },
-      visibleRange: function (currentDate) {
-        return {
-          start: currentDate.clone().startOf('year'),
-          end: currentDate.clone().endOf('year'),
-        };
-      },
-    },
-  };
 
   return (
     <div className="demo-app ">
@@ -124,7 +106,7 @@ const Calendar = () => {
           selectable={true}
           selectMirror={true}
           dayMaxEvents={true}
-          weekends={state.weekendsVisible}
+          weekends={true}
           initialEvents={INITIAL_EVENTS}
           select={(selectInfo) => {
             handleDateSelect(selectInfo);
