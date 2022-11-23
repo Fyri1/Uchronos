@@ -34,7 +34,7 @@ const Header = () => {
               variant="contained"
               onClick={() => logout()}
             >
-              Log in
+              Log out
             </Button>
           </div>
         </div>
