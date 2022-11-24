@@ -94,7 +94,7 @@ const Calendar = () => {
       // const response = await $api.get('/calendar/' + localStorage.getItem("id"));
       const calendars = await $api.get('/calendar/');
       setCalendarsList([ ...calendars.data.data ]);
-
+      
       const events = await $api.get('/calendar/event/' + calendars.data.data[0].id);
       setDisplayedCalendarData({ ...calendars.data.data[0], events: events.data.data });
       
