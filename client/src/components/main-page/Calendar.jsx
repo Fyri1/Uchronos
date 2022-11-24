@@ -6,28 +6,28 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
-import { INITIAL_EVENTS } from '../../utils/event-utils.js';
-import { v4 as uuidv4 } from 'uuid';
 import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
 
-const handleDateSelect = async (selectInfo) => {
+const handleDateSelect = async (selectInfo, displayedCalendarData, setLoading) => {
   let title = prompt('Please enter a new title for your event');
   let calendarApi = selectInfo.view.calendar;
   console.log(selectInfo.view);
   calendarApi.unselect(); // clear date selection
   if (title) {
+    setLoading(true);
     try {
       const initialEvents = {
-        id: uuidv4(),
+        user_id: '8f0a0cd0-c74b-46aa-9a67-13d88076a36f',
         title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-        backgroundColor: 'red',
+        description: "temp",
+        color: 'red',
+        event_start: selectInfo.startStr,
+        event_end: selectInfo.endStr
       };
-      await $api.post('/calendar/event', initialEvents);
+      await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
       calendarApi.addEvent(initialEvents);
+      // setDisplayedCalendarData({...displayedCalendarData, events: [...displayedCalendarData.events, initialEvents]})
     } catch (e) {
       console.log('401!');
     }
@@ -73,7 +73,10 @@ const renderSidebarEvent = (event) => {
 const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [calendarsList, setCalendarsList] = useState([]);
-  const [displayedCalendarData, setDisplayedCalendarData] = useState([]);
+  const [displayedCalendarData, setDisplayedCalendarData] = useState({
+    id: "",
+    events: []
+  });
 
   const [state, setState] = useState({
     weekendsVisible: true,
@@ -83,19 +86,17 @@ const Calendar = () => {
   React.useEffect(() => {
     console.log('Getting user calendars');
     OnLoad();
-  }, []);
+  }, [loading]);
 
   async function OnLoad() {
     try {
       //// NADO DETO NARIT EBANII ID USERA
       // const response = await $api.get('/calendar/' + localStorage.getItem("id"));
-      let response = await $api.get('/calendar/');
+      const calendars = await $api.get('/calendar/');
+      setCalendarsList([ ...calendars.data.data ]);
 
-      setCalendarsList([ ...response.data.data ]);
-
-      response = await $api.get('/calendar/event/' + response.data.data[0].id);
-      // console.log(response);
-      setDisplayedCalendarData(response.data.data);
+      const events = await $api.get('/calendar/event/' + calendars.data.data[0].id);
+      setDisplayedCalendarData({ ...calendars.data.data[0], events: events.data.data });
       
       setLoading(false);
     } catch (err) {
@@ -148,7 +149,8 @@ const Calendar = () => {
   });
 
   // TEMP
-  const eventsElements = displayedCalendarData.map((event, i, arr) => {
+  // console.log(displayedCalendarData);
+  const eventsElements = displayedCalendarData.events.map((event, i, arr) => {
     return {
       id: event.id,
       title: event.title,
@@ -193,7 +195,7 @@ const Calendar = () => {
               weekends={true}
               initialEvents={eventsElements}
               select={(selectInfo) => {
-                handleDateSelect(selectInfo);
+                handleDateSelect(selectInfo, displayedCalendarData, setLoading);
                 // console.log(selectInfo.jsEvent.target);
                 // setAnchorEl(selectInfo.jsEvent.target);
               }}
