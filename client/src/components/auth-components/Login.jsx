@@ -24,7 +24,7 @@ const getSchemeValidationLogin = (t) => {
     login: yup
       .string()
       .required(t('body.login.fields.login.error.required'))
-      .min(6, 'short login')
+      .min(3, 'short login')
       .max(30, 'long login')
       .trim(),
     password: yup
@@ -39,6 +39,7 @@ const getSchemeValidationLogin = (t) => {
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorCringe, setCringe] = useState();
   const { t } = useContext(LanguageContext);
   const navigate = useNavigate();
 
@@ -57,24 +58,15 @@ const Login = () => {
       setLoading(true);
       try {
         const data = await $api.post(routes.loginPath(), values);
-        console.log('123123');
+        localStorage.setItem('jwt', data.accessToken);
+        apiSetHeader('Authorization', `Bearer ${data.accessToken}`);
+        setLoading(false);
+        window.location.href = '/';
       } catch (err) {
-        formik.errors.
-        console.log('123123');
+        setCringe(err.response.data.message);
       } finally {
         setLoading(false);
       }
-      // console.log(data.response.status);
-      //
-      //
-      // localStorage.setItem('jwt', data.accessToken);
-      // apiSetHeader('Authorization', `Bearer ${data.accessToken}`);
-      // setLoading(false);
-      // window.location.href = '/';
-
-      // setLoading(false);
-      // console.log(error);
-      // formik.errors.login = error.response.data.message;
     },
   });
 
@@ -85,7 +77,10 @@ const Login = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
+  console.log(
+    (formik.errors?.login ? formik.errors.login : null) ||
+      (errorCringe ? errorCringe : null)
+  );
   return (
     <form
       onSubmit={formik.handleSubmit}
@@ -104,8 +99,14 @@ const Login = () => {
               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               onChange={formik.handleChange}
               value={formik.values.login}
-              error={Boolean(formik.errors?.login)}
-              helperText={formik.errors?.login ? formik.errors.login : null}
+              error={
+                Boolean(formik.errors?.login) ||
+                Boolean(errorCringe ? errorCringe : null)
+              }
+              helperText={
+                (formik.errors?.login ? formik.errors.login : null) ||
+                (errorCringe ? errorCringe : null)
+              }
             />
             <FormControl
               variant="outlined"
