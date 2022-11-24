@@ -5,7 +5,6 @@ import CalendarEvent from '../models/CalendarEvent.js';
 import { v4 as uuidv4 } from 'uuid';
 
 class CalendarController {
-
   async getAllCalendars(req, res, next) {
     // const token = req.headers.authorization.split(' ')[1];
     try {
@@ -16,10 +15,10 @@ class CalendarController {
       res.status(200);
       res.json({
         massage: 'Got all caledars!',
-        data
+        data,
       });
     } catch (e) {
-      console.log("pizda calendary: getAllCalendars")
+      console.log('pizda calendary: getAllCalendars');
       next(e);
     }
   }
@@ -34,10 +33,10 @@ class CalendarController {
       res.status(200);
       res.json({
         massage: 'Got all caledars for user!',
-        data
+        data,
       });
     } catch (e) {
-      console.log("pizda calendary: getAllCalendarsForUser " + e)
+      console.log('pizda calendary: getAllCalendarsForUser ' + e);
       next(e);
     }
   }
@@ -47,7 +46,7 @@ class CalendarController {
     try {
       // TokenService.validateAccessToken(token);
       const { calendar_id } = req.params;
-      console.log("pizdos");
+      console.log('pizdos');
       console.log(calendar_id);
 
       const data = await CalendarEvent.getAllEventsForCalendarId(calendar_id);
@@ -72,12 +71,18 @@ class CalendarController {
       const { title, description } = req.body;
       const id = uuidv4();
       const created_at = new Date().toISOString().replace(/T.*$/, '');
-      await Calendar.addCalendar({ id, user_id, title, description, created_at });
+      await Calendar.addCalendar({
+        id,
+        user_id,
+        title,
+        description,
+        created_at,
+      });
 
       res.status(200);
-      res.json({ massage: "calendar created successfully" });
+      res.json({ massage: 'calendar created successfully' });
     } catch (e) {
-      console.log("pizda calendary: addCalendar " + e)
+      console.log('pizda calendary: addCalendar ' + e);
       next(e);
     }
   }
@@ -89,13 +94,24 @@ class CalendarController {
       const { calendar_id } = req.params;
       console.log(req.body);
 
-      const { user_id, title, description, color, event_start, event_end } = req.body;
+      const { user_id, title, description, color, event_start, event_end } =
+        req.body;
       const id = uuidv4();
       const created_at = new Date().toISOString().replace(/T.*$/, '');
-      await CalendarEvent.addCalendarEvent({ id, user_id, calendar_id, title, description, color, created_at, event_start, event_end });
-      
+      await CalendarEvent.addCalendarEvent({
+        id,
+        user_id,
+        calendar_id,
+        title,
+        description,
+        color,
+        created_at,
+        event_start,
+        event_end,
+      });
+
       res.status(200);
-      res.json({ massage: "event created successfully" });
+      res.json({ massage: 'event created successfully' });
     } catch (e) {
       next(e);
     }
