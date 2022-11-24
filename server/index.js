@@ -3,6 +3,7 @@ import { Server } from 'socket.io';
 import http from 'http';
 import bodyParser from 'body-parser';
 import authRouter from './router/auth-router.js';
+import userRouter from './router/user-router.js';
 import calendarRouter from './router/calendar-router.js';
 import errorMiddleware from './middlewares/error-middleware.js';
 import * as dotenv from 'dotenv';
@@ -45,6 +46,7 @@ export default () => {
   app.use('/avatars', Express.static(`${path.resolve()}/avatars`));
   app.use('/picture-post', Express.static(`${path.resolve()}/picture-post`));
   app.use('/api/auth', socketMiddleware, authRouter);
+  app.use('/api/users', socketMiddleware, userRouter);
   app.use('/api/calendar', socketMiddleware, calendarRouter);
   app.use(errorMiddleware);
   return createSocketServer;

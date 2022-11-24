@@ -71,10 +71,38 @@ const renderSidebarEvent = (event) => {
 };
 
 const Calendar = () => {
+  const [loading, setLoading] = useState(true);
+  const [calendarsList, setCalendarsList] = useState([]);
+  const [displayedCalendarData, setDisplayedCalendarData] = useState([]);
+
   const [state, setState] = useState({
     weekendsVisible: true,
     currentEvents: [],
   });
+
+  React.useEffect(() => {
+    console.log('Getting user calendars');
+    OnLoad();
+  }, []);
+
+  async function OnLoad() {
+    try {
+      //// NADO DETO NARIT EBANII ID USERA
+      // const response = await $api.get('/calendar/' + localStorage.getItem("id"));
+      let response = await $api.get('/calendar/');
+
+      setCalendarsList([ ...response.data.data ]);
+
+      response = await $api.get('/calendar/event/' + response.data.data[0].id);
+      // console.log(response);
+      setDisplayedCalendarData(response.data.data);
+      
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const { setAnchorEl } = useContext(ModalsContext);
   const handleWeekendsToggle = () => {
     setState({
@@ -102,40 +130,82 @@ const Calendar = () => {
     },
   };
 
+  // TEMP
+  const calendarsElements = calendarsList.map((calendar, i, arr) => {
+    // Find and mark the last element of loaded posts (for endless scroll)
+    return (
+      <div className="calendarName">
+        <div>{calendar.title}</div>
+        {
+          calendar.title === displayedCalendarData.title
+          ?
+          <div> - selected</div>
+          :
+          <div></div>
+        }
+      </div>
+    )
+  });
+
+  // TEMP
+  const eventsElements = displayedCalendarData.map((event, i, arr) => {
+    return {
+      id: event.id,
+      title: event.title,
+      start: event.event_start,
+      // end: event.event_end,
+    }
+  });
+
+
   return (
     <div className="demo-app ">
       {/* {renderSidebar()} */}
-      <div className="demo-app-main">
-        <EventModal />
-        <FullCalendar
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            interactionPlugin,
-            listPlugin,
-          ]}
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
-          }}
-          initialView="dayGridMonth"
-          editable={true}
-          selectable={true}
-          selectMirror={true}
-          dayMaxEvents={true}
-          weekends={state.weekendsVisible}
-          initialEvents={INITIAL_EVENTS}
-          select={(selectInfo) => {
-            handleDateSelect(selectInfo);
-            // console.log(selectInfo.jsEvent.target);
-            // setAnchorEl(selectInfo.jsEvent.target);
-          }}
-          eventContent={renderEventContent}
-          eventClick={handleEventClick}
-          eventsSet={handleEvents}
-        />
-      </div>
+      {
+        !loading
+        ?
+        <div>
+          <div className='sidebar'>
+            <div>
+              <div>{calendarsElements}</div>
+            </div>
+          </div>
+
+          <div className="demo-app-main">
+            <EventModal />
+            <FullCalendar
+              plugins={[
+                dayGridPlugin,
+                timeGridPlugin,
+                interactionPlugin,
+                listPlugin,
+              ]}
+              headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
+              }}
+              initialView="dayGridMonth"
+              editable={true}
+              selectable={true}
+              selectMirror={true}
+              dayMaxEvents={true}
+              weekends={true}
+              initialEvents={eventsElements}
+              select={(selectInfo) => {
+                handleDateSelect(selectInfo);
+                // console.log(selectInfo.jsEvent.target);
+                // setAnchorEl(selectInfo.jsEvent.target);
+              }}
+              eventContent={renderEventContent}
+              eventClick={handleEventClick}
+              eventsSet={handleEvents}
+            />
+          </div>
+        </div>
+        :
+        <div></div>
+      }
     </div>
   );
 };
