@@ -17,16 +17,27 @@ class User {
   }
 
   async getAllUsers() {
+    // ya tak ponimau ti eto spizdil iz usofa ibo zapros hyinya
+    // const data = await client('users')
+    //   .join('roles', 'users.id', '=', 'roles.user_id')
+    //   .select(
+    //     'users.id',
+    //     'users.login',
+    //     'users.full_name',
+    //     'users.email',
+    //     'users.profile_pic',
+    //     'users.rating',
+    //     'roles.role'
+    //   );
     const data = await client('users')
-      .join('roles', 'users.id', '=', 'roles.user_id')
       .select(
         'users.id',
         'users.login',
-        'users.full_name',
         'users.email',
-        'users.profile_pic',
-        'users.rating',
-        'roles.role'
+        'users.password',
+        'users.link_event',
+        'users.active',
+        'users.created_at'
       );
     return data;
   }

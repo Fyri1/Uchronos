@@ -10,6 +10,8 @@ export const up = (knex) =>
     table.string('color').notNullable();
     // table.
     table.timestamp('created_at').defaultTo(knex.fn.now());
+    table.timestamp('event_start').notNullable();
+    table.timestamp('event_end');
   });
 
 export const down = (knex) => knex.schema.dropTable('users');

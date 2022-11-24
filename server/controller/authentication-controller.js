@@ -10,6 +10,8 @@ import moment from 'moment';
 import Token from '../models/Token.js';
 import bcrypt from 'bcrypt';
 
+import Calendar from '../models/Calendar.js';
+
 class Authorization {
   async authRegister(req, res, next) {
     try {
@@ -144,6 +146,17 @@ class Authorization {
       }
       await User.setActive(user.id);
       await User.deleteLink(user.id);
+
+      // Create a main calendar for activated user
+      const calendar_id = uuidv4();
+      await Calendar.addCalendar({
+        id: calendar_id,
+        user_id: user.id,
+        title: 'Main calendar',
+        description: 'This is your main calendar',
+        created_at: new Date().toISOString().replace(/T.*$/, '')
+      });
+      
       req.io.emit('email', { failed: false, validLink: false });
       res.status(201);
       res.json({
