@@ -105,31 +105,13 @@ const Calendar = () => {
   }
 
   const { setAnchorEl } = useContext(ModalsContext);
-  const handleWeekendsToggle = () => {
-    setState({
-      weekendsVisible: !weekendsVisible,
-    });
-  };
+  
   const handleEvents = (events) => {
     setState({
       currentEvents: events,
     });
   };
 
-  const views = {
-    timelineCustom: {
-      type: 'timeline',
-      buttonText: 'Year',
-      dateIncrement: { years: 1 },
-      slotDuration: { months: 1 },
-      visibleRange: function (currentDate) {
-        return {
-          start: currentDate.clone().startOf('year'),
-          end: currentDate.clone().endOf('year'),
-        };
-      },
-    },
-  };
 
   // TEMP
   const calendarsElements = calendarsList.map((calendar, i, arr) => {

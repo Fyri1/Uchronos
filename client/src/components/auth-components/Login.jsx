@@ -24,10 +24,14 @@ const getSchemeValidationLogin = (t) => {
     login: yup
       .string()
       .required(t('body.login.fields.login.error.required'))
+      .min(6, 'short login')
+      .max(30, 'long login')
       .trim(),
     password: yup
       .string()
       .required(t('body.login.fields.password.error.required'))
+      .min(6, 'short login')
+      .max(30, 'long login')
       .trim(),
   });
 };
@@ -52,15 +56,25 @@ const Login = () => {
       //сробатываине после нажатия кнопки
       setLoading(true);
       try {
-        const { data } = await $api.post(routes.loginPath(), values);
-        localStorage.setItem('jwt', data.accessToken);
-        apiSetHeader('Authorization', `Bearer ${data.accessToken}`);
+        const data = await $api.post(routes.loginPath(), values);
+        console.log('123123');
+      } catch (err) {
+        formik.errors.
+        console.log('123123');
+      } finally {
         setLoading(false);
-        window.location.href = '/';
-      } catch (error) {
-        setLoading(false);
-        formik.errors.login = error.response.data.message;
       }
+      // console.log(data.response.status);
+      //
+      //
+      // localStorage.setItem('jwt', data.accessToken);
+      // apiSetHeader('Authorization', `Bearer ${data.accessToken}`);
+      // setLoading(false);
+      // window.location.href = '/';
+
+      // setLoading(false);
+      // console.log(error);
+      // formik.errors.login = error.response.data.message;
     },
   });
 

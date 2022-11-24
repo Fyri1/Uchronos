@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
+import $api from '../../services/api.js';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -16,6 +16,7 @@ import Link from '@mui/material/Link';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import LanguageContext from '../../contex/languageContext.js';
+import routes from '../../routes.js';
 
 const getSchemeValidationLogin = (t) => {
   return yup.object({
@@ -47,6 +48,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { t } = useContext(LanguageContext);
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -61,7 +63,15 @@ const Register = () => {
     validateOnBlur: false,
     onSubmit: async (values) => {
       setLoading(true);
-      console.log(values)
+      try {
+        const data = await $api.post(routes.registerPath(), values);
+        console.log(data);
+        // navigate('/comfirm-email');
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
+      }
     },
   });
 
@@ -202,7 +212,7 @@ const Register = () => {
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 {t('body.register.sing-in.item1')}{' '}
                 <a
-                  href="#"
+                  href="/login"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   {t('body.register.sing-in.item2')}
