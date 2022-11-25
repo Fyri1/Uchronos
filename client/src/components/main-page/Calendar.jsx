@@ -8,29 +8,32 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
+import Popup from './EventPopup.jsx';
 
-const handleDateSelect = async (selectInfo, displayedCalendarData, setLoading) => {
-  let title = prompt('Please enter a new title for your event');
+const handleDateSelect = async (selectInfo, displayedCalendarData, setLoading, setPopupActive) => {
   let calendarApi = selectInfo.view.calendar;
   console.log(selectInfo.view);
   calendarApi.unselect(); // clear date selection
-  if (title) {
+  try {
+    const initialEvents = {
+      //// NADO DETO NARIT EBANII ID USERA
+      user_id: '8f0a0cd0-c74b-46aa-9a67-13d88076a36f',
+      title: document.getElementById('titleInput').value,
+      description: document.getElementById('descriptionInput').value,
+      color: document.getElementById('colorInput').value,
+      event_start: selectInfo.startStr,
+      event_end: document.getElementById('event_endInput').value
+        ?
+        document.getElementById('event_endInput').value
+        :
+        selectInfo.endStr
+    };
+    await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
+    calendarApi.addEvent(initialEvents);
+    setPopupActive(false);
     setLoading(true);
-    try {
-      const initialEvents = {
-        user_id: '8f0a0cd0-c74b-46aa-9a67-13d88076a36f',
-        title,
-        description: "temp",
-        color: 'red',
-        event_start: selectInfo.startStr,
-        event_end: selectInfo.endStr
-      };
-      await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
-      calendarApi.addEvent(initialEvents);
-      // setDisplayedCalendarData({...displayedCalendarData, events: [...displayedCalendarData.events, initialEvents]})
-    } catch (e) {
-      console.log('401!');
-    }
+  } catch (e) {
+    console.log('401! ' + e);
   }
 };
 
@@ -77,6 +80,8 @@ const Calendar = () => {
     id: "",
     events: []
   });
+  const [popupActive, setPopupActive] = useState();
+  const [newEventInfo, setNewEventInfo] = useState();
 
   const [state, setState] = useState({
     weekendsVisible: true,
@@ -90,7 +95,6 @@ const Calendar = () => {
 
   async function OnLoad() {
     try {
-      //// NADO DETO NARIT EBANII ID USERA
       // const response = await $api.get('/calendar/' + localStorage.getItem("id"));
       const calendars = await $api.get('/calendar/');
       setCalendarsList([ ...calendars.data.data ]);
@@ -137,6 +141,8 @@ const Calendar = () => {
       id: event.id,
       title: event.title,
       start: event.event_start,
+      color: event.color,
+      description: event.description
       // end: event.event_end,
     }
   });
@@ -149,6 +155,34 @@ const Calendar = () => {
         !loading
         ?
         <div>
+          <Popup active={popupActive} setActive={setPopupActive}>
+            <p>ebat ti pidor!</p>
+            <div>
+              <label htmlFor='title'>Title:</label>
+              <input className='eventInput' id='titleInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : 'nasri v title dalbaeb'}></input>
+            </div>
+
+            <div>
+              <label htmlFor='description'>Description:</label>
+              <input className='eventInput' id='descriptionInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 && eventsElements.find(item => item.id === newEventInfo.event.id) ? eventsElements.find(item => item.id === newEventInfo.event.id).description : 'nasri v description dalbaeb'}></input>
+            </div>
+
+            <div>
+              <label htmlFor='event_end'>Duration:</label>
+              <input className='eventInput' id='event_endInput'></input>
+            </div>
+
+            <div>
+              <label htmlFor='color'>Color:</label>
+              <input className='eventInput' id='colorInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.backgroundColor : 'nasri v color dalbaeb'}></input>
+            </div>
+
+            <div>
+              <button onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setLoading, setPopupActive)}>Create</button>
+              <button onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
+            </div>
+          </Popup>
+
           <div className='sidebar'>
             <div>
               <div>{calendarsElements}</div>
@@ -156,6 +190,7 @@ const Calendar = () => {
           </div>
 
           <div className="demo-app-main">
+            
             <EventModal />
             <FullCalendar
               plugins={[
@@ -177,14 +212,21 @@ const Calendar = () => {
               weekends={true}
               initialEvents={eventsElements}
               select={(selectInfo) => {
-                handleDateSelect(selectInfo, displayedCalendarData, setLoading);
+                setNewEventInfo(selectInfo);
+                setPopupActive(true);
+                // handleDateSelect(selectInfo, displayedCalendarData, setLoading);
                 // console.log(selectInfo.jsEvent.target);
                 // setAnchorEl(selectInfo.jsEvent.target);
               }}
               eventContent={renderEventContent}
-              eventClick={handleEventClick}
+              // eventClick={handleEventClick}
+              eventClick={(selectInfo) => {
+                setNewEventInfo(selectInfo);
+                setPopupActive(true);
+              }}
               eventsSet={handleEvents}
             />
+            
           </div>
         </div>
         :
@@ -195,3 +237,4 @@ const Calendar = () => {
 };
 
 export default Calendar;
+

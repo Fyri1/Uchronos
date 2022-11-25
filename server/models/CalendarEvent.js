@@ -37,9 +37,9 @@ class CalendarEvent {
 				'event_start',
 				'event_end'
 			).where('calendar_id', '=', calendar_id);
-    if (data.length === 0) {
-      throw ApiError.NotFound('calendar not found');
-    }
+    // if (data.length === 0) {
+    //   throw ApiError.NotFound('calendar not found');
+    // }
     return data;
 	}
 
