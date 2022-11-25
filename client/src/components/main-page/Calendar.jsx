@@ -10,7 +10,7 @@ import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
 import Popup from './EventPopup.jsx';
 
-const handleDateSelect = async (selectInfo, displayedCalendarData, setLoading, setPopupActive) => {
+const handleDateSelect = async (eventsElements, selectInfo, displayedCalendarData, setLoading, setPopupActive) => {
   let calendarApi = selectInfo.view.calendar;
   console.log(selectInfo.view);
   calendarApi.unselect(); // clear date selection
@@ -28,7 +28,16 @@ const handleDateSelect = async (selectInfo, displayedCalendarData, setLoading, s
         :
         selectInfo.endStr
     };
-    await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
+
+    // Check if such event was already created
+    const checkEventWasCreatedById = eventsElements.find(item => item.id === selectInfo.event.id);
+    if (checkEventWasCreatedById) {
+      await $api.patch('/calendar/event/' + checkEventWasCreatedById.id, initialEvents);
+    } else {
+      await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
+    }
+
+    
     calendarApi.addEvent(initialEvents);
     setPopupActive(false);
     setLoading(true);
@@ -178,7 +187,7 @@ const Calendar = () => {
             </div>
 
             <div>
-              <button onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setLoading, setPopupActive)}>Create</button>
+              <button onClick={() => handleDateSelect(eventsElements, newEventInfo, displayedCalendarData, setLoading, setPopupActive)}>Create</button>
               <button onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
             </div>
           </Popup>
@@ -214,9 +223,6 @@ const Calendar = () => {
               select={(selectInfo) => {
                 setNewEventInfo(selectInfo);
                 setPopupActive(true);
-                // handleDateSelect(selectInfo, displayedCalendarData, setLoading);
-                // console.log(selectInfo.jsEvent.target);
-                // setAnchorEl(selectInfo.jsEvent.target);
               }}
               eventContent={renderEventContent}
               // eventClick={handleEventClick}

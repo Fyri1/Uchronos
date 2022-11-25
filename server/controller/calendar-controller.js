@@ -100,6 +100,23 @@ class CalendarController {
       next(e);
     }
   }
+
+  async updateCalendarEvent(req, res, next) {
+    // const token = req.headers.authorization.split(' ')[1];
+    try {
+      // TokenService.validateAccessToken(token);
+      const { event_id } = req.params;
+      console.log(req.body);
+
+      const { user_id, title, description, color, event_start, event_end } = req.body;
+      await CalendarEvent.updateCalendarEvent({ event_id, user_id, title, description, color, event_start, event_end });
+      
+      res.status(200);
+      res.json({ massage: "event updated successfully" });
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default new CalendarController();
