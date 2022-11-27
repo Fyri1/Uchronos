@@ -47,6 +47,16 @@ const getSchemeValidationLogin = (t) => {
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorValid, setErrorValid] = useState({
+    login: {
+      massage: '',
+      valid: false,
+    },
+    email: {
+      massage: '',
+      valid: false,
+    },
+  });
   const { t } = useContext(LanguageContext);
   const navigate = useNavigate();
 
@@ -66,14 +76,24 @@ const Register = () => {
       try {
         const data = await $api.post(routes.registerPath(), values);
         console.log(data);
-        // navigate('/comfirm-email');
-      } catch (e) {
-        console.log(e);
+        navigate('/comfirm-email');
+      } catch (err) {
+        const errors = err.response.data.errors.errors;
+        errors.map((item) => {
+          setErrorValid({
+            ...errorValid,
+            [item.param]: {
+              valid: true,
+              massage: item.msg,
+            },
+          });
+        });
       } finally {
         setLoading(false);
       }
     },
   });
+  console.log(errorValid);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -102,8 +122,14 @@ const Register = () => {
                 className=" text-gray-900 sm:text-sm block w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 onChange={formik.handleChange}
                 value={formik.values.email}
-                error={Boolean(formik.errors?.email)}
-                helperText={formik.errors?.email ? formik.errors.email : null}
+                error={
+                  Boolean(formik.errors?.email) ||
+                  Boolean(errorValid.email.valid)
+                }
+                helperText={
+                  (formik.errors?.email ? formik.errors.email : null) ||
+                  (errorValid.email.valid ? errorValid.email.massage : null)
+                }
               />
               <TextField
                 id="login"
@@ -112,8 +138,14 @@ const Register = () => {
                 className=" text-gray-900 sm:text-sm block w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 onChange={formik.handleChange}
                 value={formik.values.login}
-                error={Boolean(formik.errors?.login)}
-                helperText={formik.errors?.login ? formik.errors.login : null}
+                error={
+                  Boolean(formik.errors?.login) ||
+                  Boolean(errorValid.login.valid)
+                }
+                helperText={
+                  (formik.errors?.login ? formik.errors.login : null) ||
+                  (errorValid.login.valid ? errorValid.login.massage : null)
+                }
               />
               <FormControl
                 variant="outlined"

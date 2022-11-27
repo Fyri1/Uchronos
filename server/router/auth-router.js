@@ -19,7 +19,7 @@ router.post(
 );
 router.post(
   '/login/',
-  body('login').isLength({ min: 6, max: 30 }).trim(),
+  body('login').isLength({ min: 3, max: 30 }).trim(),
   body('password').not().isEmpty().trim(),
   Authorization.authLogin
 );
