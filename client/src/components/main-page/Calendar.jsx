@@ -17,7 +17,7 @@ const handleDateSelect = async (eventsElements, selectInfo, displayedCalendarDat
   try {
     const initialEvents = {
       //// NADO DETO NARIT EBANII ID USERA
-      user_id: '8f0a0cd0-c74b-46aa-9a67-13d88076a36f',
+      // user_id: '8f0a0cd0-c74b-46aa-9a67-13d88076a36f',
       title: document.getElementById('titleInput').value,
       description: document.getElementById('descriptionInput').value,
       color: document.getElementById('colorInput').value,
@@ -30,12 +30,13 @@ const handleDateSelect = async (eventsElements, selectInfo, displayedCalendarDat
     };
 
     // Check if such event was already created
-    const checkEventWasCreatedById = eventsElements.find(item => item.id === selectInfo.event.id);
-    if (checkEventWasCreatedById) {
-      await $api.patch('/calendar/event/' + checkEventWasCreatedById.id, initialEvents);
-    } else {
-      await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
-    }
+    // const checkEventWasCreatedById = eventsElements.find(item => item.id === selectInfo.event.id);
+    // if (checkEventWasCreatedById) {
+    //   await $api.patch('/calendar/event/' + checkEventWasCreatedById.id, initialEvents);
+    // } else {
+    //   await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
+    // }
+    await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
 
     
     calendarApi.addEvent(initialEvents);

@@ -83,16 +83,16 @@ class CalendarController {
   }
 
   async addCalendarEvent(req, res, next) {
-    // const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(' ')[1];
     try {
-      // TokenService.validateAccessToken(token);
+      const userData = TokenService.validateAccessToken(token);
       const { calendar_id } = req.params;
       console.log(req.body);
 
-      const { user_id, title, description, color, event_start, event_end } = req.body;
+      const { title, description, color, event_start, event_end } = req.body;
       const id = uuidv4();
       const created_at = new Date().toISOString().replace(/T.*$/, '');
-      await CalendarEvent.addCalendarEvent({ id, user_id, calendar_id, title, description, color, created_at, event_start, event_end });
+      await CalendarEvent.addCalendarEvent({ id, user_id: userData.id, calendar_id, title, description, color, created_at, event_start, event_end });
       
       res.status(200);
       res.json({ massage: "event created successfully" });
