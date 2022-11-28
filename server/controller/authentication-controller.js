@@ -58,6 +58,7 @@ class Authorization {
         httpOnly: true,
       });
       res.status(200);
+      console.log(accessToken);
       res.json({
         massage: 'You authorization, welcome!',
         accessToken,

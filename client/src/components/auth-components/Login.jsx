@@ -58,8 +58,9 @@ const Login = () => {
       setLoading(true);
       try {
         const data = await $api.post(routes.loginPath(), values);
-        localStorage.setItem('jwt', data.accessToken);
-        apiSetHeader('Authorization', `Bearer ${data.accessToken}`);
+        console.log(data);
+        localStorage.setItem('jwt', data.data.accessToken);
+        apiSetHeader('Authorization', `Bearer ${data.data.accessToken}`);
         setLoading(false);
         window.location.href = '/';
       } catch (err) {
