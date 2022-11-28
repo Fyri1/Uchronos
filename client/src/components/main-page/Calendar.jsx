@@ -10,6 +10,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
+import '../css-files/Calendar.css';
 
 const handleDateSelect = async (selectInfo) => {
   // let title = prompt('Please enter a new title for your event');
@@ -43,9 +44,9 @@ const handleEventClick = (clickInfo) => {
 
 const renderEventContent = (eventInfo) => {
   // console.log(eventInfo);
-  return (
+  return (// для отображения синей полосы ивента в самом каледаре 
     <>
-      <b>{eventInfo.timeText}</b>
+      <b>{eventInfo.timeText}</b> 
       <i>{eventInfo.event.title}</i>
     </>
   );
@@ -60,7 +61,7 @@ const renderSidebarEvent = (event) => {
           month: 'short',
           day: 'numeric',
         })}
-      </b>
+      </b> 
       <i>{event.title}</i>
     </li>
   );
@@ -99,38 +100,43 @@ const Calendar = () => {
   };
 
   return (
-    <div className="demo-app ">
-      {/* {renderSidebar()} */}
-      <div className="demo-app-main">
-        <EventModal />
-        <FullCalendar
-          plugins={[
-            dayGridPlugin,
-            timeGridPlugin,
-            interactionPlugin,
-            listPlugin,
-          ]}
-          headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
-          }}
-          initialView="dayGridMonth"
-          editable={true}
-          selectable={true}
-          selectMirror={true}
-          dayMaxEvents={true}
-          weekends={state.weekendsVisible}
-          initialEvents={INITIAL_EVENTS}
-          select={(selectInfo) => {
-            handleDateSelect(selectInfo);
-            console.log(selectInfo.jsEvent.target);
-            setAnchorEl(selectInfo.jsEvent.target);
-          }}
-          eventContent={renderEventContent}
-          eventClick={handleEventClick}
-          eventsSet={handleEvents}
-        />
+    <div className='kokon'>
+      <div className="demo-app ">
+        {/* {renderSidebar()} */}
+        <div className="demo-app-main">
+          <EventModal />
+          <div className='day'> 
+            <FullCalendar
+              plugins={[
+                dayGridPlugin,
+                timeGridPlugin,
+                interactionPlugin,
+                listPlugin,
+              ]}
+              headerToolbar={{
+                left: 'prev,next today', // отвечает за кнопки слева ( < > and )
+                center: 'title',
+                right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
+              }}
+              initialView="dayGridMonth"
+              editable={true}
+              selectable={true}
+              selectMirror={true}ъ
+              
+              dayMaxEvents={true}
+              weekends={state.weekendsVisible}
+              initialEvents={INITIAL_EVENTS}
+              select={(selectInfo) => {
+                handleDateSelect(selectInfo);
+                console.log(selectInfo.jsEvent.target);
+                setAnchorEl(selectInfo.jsEvent.target);
+              }}
+              eventContent={renderEventContent}
+              eventClick={handleEventClick}
+              eventsSet={handleEvents}
+            />
+            </div>
+        </div>
       </div>
     </div>
   );

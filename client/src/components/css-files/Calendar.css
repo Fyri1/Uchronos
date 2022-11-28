@@ -1,0 +1,7 @@
+body {
+    overflow-y: hidden;
+}
+.day{
+    background-color: #74992e;
+    /* border: 50px solid darkblue; */
+}
