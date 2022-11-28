@@ -72,7 +72,7 @@ class CalendarEvent {
 	}
 
   async updateCalendarEvent({
-		id,
+		event_id,
 		user_id,
 		title,
 		description,
@@ -103,11 +103,7 @@ class CalendarEvent {
       }
       
       console.log(itemsToUpdate);
-      await client('calendar_events').update({
-        user_id,
-        title,
-        color
-      }).where('id', '=', id);
+      await client('calendar_events').update(itemsToUpdate).where('id', '=', event_id);
     } catch (err) {
       if (!err.toString().match(/ignore/)) {
         console.log(err);
@@ -115,6 +111,18 @@ class CalendarEvent {
       }
     }
 	}
+
+  async deleteCalendarEvent(event_id) {
+    try {
+      console.log(event_id);
+      await client('calendar_events').where('id', '=', event_id).del();
+    } catch (err) {
+      if (!err.toString().match(/ignore/)) {
+        console.log(err);
+        throw err;
+      }
+    }
+  }
 
 }
 

@@ -15,6 +15,7 @@ router.post('/:user_id', CalendarController.addCalendar);
 router.get('/event/:calendar_id', CalendarController.getAllEventsForCalendar);
 router.post('/event/:calendar_id', CalendarController.addCalendarEvent);
 router.patch('/event/:event_id', CalendarController.updateCalendarEvent);
+router.delete('/event/:event_id', CalendarController.deleteCalendarEvent);
 
 
 export default router;

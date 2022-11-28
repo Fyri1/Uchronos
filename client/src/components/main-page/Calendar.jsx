@@ -10,9 +10,9 @@ import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
 import Popup from './EventPopup.jsx';
 
-const handleDateSelect = async (eventsElements, selectInfo, displayedCalendarData, setLoading, setPopupActive) => {
+const handleDateSelect = async (selectInfo, displayedCalendarData, setPopupActive) => {
   let calendarApi = selectInfo.view.calendar;
-  console.log(selectInfo.view);
+  // console.log(selectInfo);
   calendarApi.unselect(); // clear date selection
   try {
     const initialEvents = {
@@ -21,42 +21,69 @@ const handleDateSelect = async (eventsElements, selectInfo, displayedCalendarDat
       title: document.getElementById('titleInput').value,
       description: document.getElementById('descriptionInput').value,
       color: document.getElementById('colorInput').value,
-      event_start: selectInfo.startStr,
-      event_end: document.getElementById('event_endInput').value
-        ?
-        document.getElementById('event_endInput').value
-        :
-        selectInfo.endStr
+      start: selectInfo.startStr,
+      end: document.getElementById('event_endInput').value
+           ?
+           document.getElementById('event_endInput').value
+           :
+           selectInfo.endStr
     };
 
     // Check if such event was already created
-    // const checkEventWasCreatedById = eventsElements.find(item => item.id === selectInfo.event.id);
-    // if (checkEventWasCreatedById) {
-    //   await $api.patch('/calendar/event/' + checkEventWasCreatedById.id, initialEvents);
-    // } else {
-    //   await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
-    // }
-    await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
+    if (selectInfo.event?.id) {
+      await $api.patch('/calendar/event/' + selectInfo.event.id, initialEvents);
+      //// TEMP HYINYA
+      //// YA XZ KAK ESHE SDELAT SHOB PO KRASOTE POETOMY DELAEM PO PACANSKI
+      if (document.getElementById('titleInput').value) {
+        selectInfo.title = document.getElementById('titleInput').value;
+      } else {
+        selectInfo.title = selectInfo.event.title;
+      }
 
+      if (document.getElementById('descriptionInput').value) {
+        selectInfo.description = document.getElementById('descriptionInput').value;
+      }
+
+      if (document.getElementById('colorInput').value) {
+        selectInfo.color = document.getElementById('colorInput').value;
+      } else {
+        selectInfo.color = selectInfo.event.backgroundColor;
+      }
+
+      selectInfo.start = selectInfo.event.startStr;
+      selectInfo.end = selectInfo.event.endStr;      
+      calendarApi.getEventById(selectInfo.event.id).remove();
+      calendarApi.addEvent(selectInfo);
+    } else {
+      await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
+      calendarApi.addEvent(initialEvents);
+    }
     
-    calendarApi.addEvent(initialEvents);
     setPopupActive(false);
-    setLoading(true);
   } catch (e) {
     console.log('401! ' + e);
   }
 };
 
-const handleEventClick = (clickInfo) => {
-  console.log(clickInfo.event._context.getCurrentData());
-  if (
-    confirm(
-      `Are you sure you want to delete the event '${clickInfo.event.title}'`
-    )
-  ) {
-    clickInfo.event.remove();
+const handleDateDelete = async (selectInfo, setPopupActive) => {
+  try {
+    await $api.delete('/calendar/event/' + selectInfo.event.id);
+    
+    setPopupActive(false);
+    let calendarApi = selectInfo.view.calendar;
+    calendarApi.getEventById(selectInfo.event.id).remove();
+  } catch (e) {
+    console.log('401! ' + e);
   }
 };
+
+const searchButtonHandle = async () => {
+  try {
+    
+  } catch (e) {
+    console.log('401! ' + e);
+  }
+}
 
 const renderEventContent = (eventInfo) => {
   // console.log(eventInfo);
@@ -105,7 +132,6 @@ const Calendar = () => {
 
   async function OnLoad() {
     try {
-      // const response = await $api.get('/calendar/' + localStorage.getItem("id"));
       const calendars = await $api.get('/calendar/');
       setCalendarsList([ ...calendars.data.data ]);
       
@@ -119,13 +145,25 @@ const Calendar = () => {
   }
 
   const { setAnchorEl } = useContext(ModalsContext);
+
+  const handleEvent = async (event) => {
+    console.log("ya pidoras");
+    console.log(event);
+    try {
+      await $api.patch('/calendar/event/' + event.event.id, {
+        event_start: event.event.startStr,
+        event_end: event.event.endStr
+      });
+    } catch (e) {
+      console.log('401! ' + e);
+    }
+  }
   
-  const handleEvents = (events) => {
+  const handleEvents = async (events) => {
     setState({
       currentEvents: events,
     });
   };
-
 
   // TEMP
   const calendarsElements = calendarsList.map((calendar, i, arr) => {
@@ -152,8 +190,8 @@ const Calendar = () => {
       title: event.title,
       start: event.event_start,
       color: event.color,
-      description: event.description
-      // end: event.event_end,
+      description: event.description,
+      end: event.event_end
     }
   });
 
@@ -188,14 +226,33 @@ const Calendar = () => {
             </div>
 
             <div>
-              <button onClick={() => handleDateSelect(eventsElements, newEventInfo, displayedCalendarData, setLoading, setPopupActive)}>Create</button>
+              <button onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setPopupActive)}>
+                {
+                  newEventInfo?.event?.id
+                  ?
+                  <label>Update</label>
+                  :
+                  <label>Create</label>
+                }
+              </button>
               <button onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
+              {
+                newEventInfo && Object.keys(newEventInfo).length === 4
+                ?
+                <button onClick={() => handleDateDelete(newEventInfo, setPopupActive)}>Delete</button>
+                :
+                null
+              }
             </div>
           </Popup>
 
           <div className='sidebar'>
             <div>
               <div>{calendarsElements}</div>
+              <div>
+                <input placeholder='Enter event name'></input>
+                <button onClick={searchButtonHandle}></button>
+              </div>
             </div>
           </div>
 
@@ -226,11 +283,12 @@ const Calendar = () => {
                 setPopupActive(true);
               }}
               eventContent={renderEventContent}
-              // eventClick={handleEventClick}
               eventClick={(selectInfo) => {
                 setNewEventInfo(selectInfo);
                 setPopupActive(true);
               }}
+              eventDrop={handleEvent}
+              eventResize={handleEvent}
               eventsSet={handleEvents}
             />
             
