@@ -11,25 +11,32 @@ body {
 }
 
 
+.day_calendar{
+  width: 120vh;
+  left: 20%;
+  height: 120vh;
+  position: fixed;
+}
+
 
 
 .calendarName{
   background-color:#74992e;
+  max-width: 295vh;
 }
 .selected{
   background-color:#302e99;
 }
-.day_calendar{
-  width: 80%;
-  left: 20%;
-  
-}
+
 #mainId{
   float: left;
 
+  position: fixed;
+  border: 1px solid #000;
+  margin: 10px;
+  top:20vh;
+  height: 20vh;
   
-  border: 2px solid #000;
-  margin: 2px;
 }
 
 
