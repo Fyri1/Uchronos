@@ -174,7 +174,7 @@ const Calendar = () => {
         {
           calendar.title === displayedCalendarData.title
           ?
-          <div> - selected</div>
+          <div className='selected'> - selected</div>
           :
           <div></div>
         }
@@ -205,7 +205,7 @@ const Calendar = () => {
           ?
           <div>
 
-            {/* доделать лейбл */}
+      
             <Popup active={popupActive} setActive={setPopupActive}>
               <div className = 'Greetings'><p>Hi GERMAN PIDOR!</p></div>
               
@@ -235,76 +235,79 @@ const Calendar = () => {
                 </div>
 
               <div>
-                <button  onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setPopupActive)}>
+                <button className='button_create' onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setPopupActive)}>
                   {
                     newEventInfo?.event?.id
                     ?
-                    <div class="button_hola">
+                    <div class="button_hola" id ="button_hola_create" >
                       <label>Update</label>
                     </div>
                     :
-                    <div class="button_hola">
+                    <div class="button_hola"  id ="button_hola_create">
                       <label>Create</label>
                     </div>
                   }
                 </button>
-                <button class="button_hola_cancel" onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
+                <button class="button_hola" id ="button_hola_cancel" onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
                 {
                   newEventInfo && Object.keys(newEventInfo).length === 4
                   ?
-                  <button onClick={() => handleDateDelete(newEventInfo, setPopupActive)}>Delete</button>
+                  <button class="button_hola" id ="button_hola_delete" onClick={() => handleDateDelete(newEventInfo, setPopupActive)}>Delete</button>
                   :
                   null
                 }
               </div>
             </Popup>
 
-            <div className='sidebar'>
-              <div>
-                <div>{calendarsElements}</div>
+            <div className='main_context'>
+              <div className='sidebar' id ="mainId">
                 <div>
-                  <input placeholder='Enter event name'></input>
-                  <button onClick={searchButtonHandle}></button>
+                  <div>{calendarsElements}</div>
+                  <div>
+                    <input placeholder='Enter event name'></input>
+                    <button onClick={searchButtonHandle}></button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="demo-app-main">
-              
-              <EventModal />
-              <FullCalendar
-                plugins={[
-                  dayGridPlugin,
-                  timeGridPlugin,
-                  interactionPlugin,
-                  listPlugin,
-                ]}
-                headerToolbar={{
-                  left: 'prev,next today',
-                  center: 'title',
-                  right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
-                }}
-                initialView="dayGridMonth"
-                editable={true}
-                selectable={true}
-                selectMirror={true}
-                dayMaxEvents={true}
-                weekends={true}
-                initialEvents={eventsElements}
-                select={(selectInfo) => {
-                  setNewEventInfo(selectInfo);
-                  setPopupActive(true);
-                }}
-                eventContent={renderEventContent}
-                eventClick={(selectInfo) => {
-                  setNewEventInfo(selectInfo);
-                  setPopupActive(true);
-                }}
-                eventDrop={handleEvent}
-                eventResize={handleEvent}
-                eventsSet={handleEvents}
-              />
-              
+              <div className="demo-app-main" >
+                
+                <EventModal />
+                
+                <FullCalendar
+                  plugins={[
+                    dayGridPlugin,
+                    timeGridPlugin,
+                    interactionPlugin,
+                    listPlugin,
+                  ]}
+                  headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
+                  }}
+                  initialView="dayGridMonth"
+                  editable={true}
+                  selectable={true}
+                  selectMirror={true}
+                  dayMaxEvents={true}
+                  weekends={true}
+                  initialEvents={eventsElements}
+                  select={(selectInfo) => {
+                    setNewEventInfo(selectInfo);
+                    setPopupActive(true);
+                  }}
+                  eventContent={renderEventContent}
+                  eventClick={(selectInfo) => {
+                    setNewEventInfo(selectInfo);
+                    setPopupActive(true);
+                  }}
+                  eventDrop={handleEvent}
+                  eventResize={handleEvent}
+                  eventsSet={handleEvents}
+                />
+                
+              </div>
             </div>
           </div>
           :

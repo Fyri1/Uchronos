@@ -9,6 +9,30 @@ body {
     text-align:  center;
     font: small-caps bold 24px sans-serif;
 }
+
+
+
+
+.calendarName{
+  background-color:#74992e;
+}
+.selected{
+  background-color:#302e99;
+}
+.main_context{
+  
+
+}
+#mainId{
+  float: left;
+
+  
+  border: 2px solid #000;
+  margin: 2px;
+}
+
+
+
 .text-field {
   margin-bottom: 1rem;
 }
@@ -107,6 +131,10 @@ body {
     left: 0%;
 }
 /* ПОШЛИ КНОПКИ CREATR */
+
+.button_create{
+/*  ГЕРМАН СДЕЛАЙ ТУТ КРАСИВО КНОПКИ */
+}
 .button_hola,
 .button_hola::before,
 .button_hola::after,
@@ -127,16 +155,28 @@ body {
   cursor: pointer;
 }
  
-.button_hola:hover
+/* .button_hola:hover
 {
   box-shadow: 0 0 1em .5em rgba(26, 63, 185, 0.671);
-}
+} */
  
+#button_hola_create:hover{
+  box-shadow: 0 0 1em .5em rgba(26, 185, 74, 0.671);
+
+}
+#button_hola_cancel:hover{
+  box-shadow: 0 0 1em .5em rgba(22, 92, 184, 0.671);
+ 
+}
+#button_hola_delete:hover{
+  box-shadow: 0 0 1em .5em rgba(184, 22, 57, 0.671);
+}
 .button_hola span
 {
   display: inline-block;
   width: 100%;
   padding: 0.6em 2em;
+
 }
  
 .button_hola:hover span
@@ -161,6 +201,7 @@ body {
   border-style: solid none;  
 }
  
+/* полоски сверху кнопки */
 .button_hola::before,
 .button_hola span::after{      
   left: 0;
@@ -175,6 +216,7 @@ body {
   border-style: none solid;   
 }
  
+/* полоски снизу кнопки */
 .button_hola::after,
 .button_hola span::before
 {
@@ -203,3 +245,4 @@ body {
 }
 
 /* ПОШЛИ КНОПКИ CANCEL */
+
