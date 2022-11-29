@@ -207,26 +207,31 @@ const Calendar = () => {
 
             {/* доделать лейбл */}
             <Popup active={popupActive} setActive={setPopupActive}>
-              <div className = 'Greetings'><p>Hi pidor!</p></div>
+              <div className = 'Greetings'><p>Hi GERMAN PIDOR!</p></div>
               
-                <div class="text-field text-field_floating">
-                  <label className='text-field__label' htmlFor='title'>Title:</label>
+                <div class="text-field text-field_floating-2">
+                  
                   <input className='text-field__input' type="text" id='titleInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : ''}></input>
+                  <label className='text-field__label'id = "title2"   htmlFor='title'>Title</label>
                 </div>
 
-                <div class="text-field text-field_floating">
-                  <label className='text-field__label' htmlFor='description'>Description:</label>
+                <div class="text-field text-field_floating-2">
+                  
                   <input className='text-field__input' id='descriptionInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 && eventsElements.find(item => item.id === newEventInfo.event.id) ? eventsElements.find(item => item.id === newEventInfo.event.id).description : ''}></input>
+                  <label className='text-field__label'id = "title" htmlFor='description'>Description</label>
                 </div>
 
-                <div class="text-field text-field_floating">
-                  <label className='text-field__label' htmlFor='event_end'>Duration:</label>
+                <div class="text-field text-field_floating-2">
+                  
                   <input className='text-field__input' id='event_endInput'></input>
+                  <label className='text-field__label'id = "title" htmlFor='event_end'>Duration</label>
                 </div>
 
-                <div class="text-field text-field_floating">
-                  <label className='text-field__label' htmlFor='color'>Color:</label>
+                <div class="text-field text-field_floating-2">
+
                   <input className='text-field__input' id='colorInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.backgroundColor : ''}></input>
+                  <label className='text-field__label' htmlFor='color'>Color</label>
+                {/* this will make checkbox wiyh color  */}
                 </div>
 
               <div>
