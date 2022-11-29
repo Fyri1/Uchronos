@@ -106,3 +106,100 @@ body {
 #title{
     left: 0%;
 }
+/* ПОШЛИ КНОПКИ CREATR */
+.button_hola,
+.button_hola::before,
+.button_hola::after,
+.button_hola span,
+.button_hola span::before,
+.button_hola span::after
+{
+  transition: all ease .5s;
+}
+ 
+.button_hola{
+  position: relative;
+  display: inline-block;
+  padding: 0.2em;
+  margin: 1em;
+  border: solid 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+ 
+.button_hola:hover
+{
+  box-shadow: 0 0 1em .5em rgba(26, 63, 185, 0.671);
+}
+ 
+.button_hola span
+{
+  display: inline-block;
+  width: 100%;
+  padding: 0.6em 2em;
+}
+ 
+.button_hola:hover span
+{
+  background-color: #fff;
+  color: #112;
+}
+ 
+.button_hola::before,
+.button_hola::after,
+.button_hola span::before,
+.button_hola span::after
+{
+  content: '';
+  position: absolute;
+  border: 1px;
+}
+ 
+.button_hola::before,
+.button_hola span::before
+{
+  border-style: solid none;  
+}
+ 
+.button_hola::before,
+.button_hola span::after{      
+  left: 0;
+  top: -0.4em;
+  width: 100%; 
+  height: calc(100% + 0.8em);
+}
+ 
+.button_hola::after,
+.button_hola span::after
+{
+  border-style: none solid;   
+}
+ 
+.button_hola::after,
+.button_hola span::before
+{
+  top: 0;
+  left: -0.4em;
+  height: 100%;
+  width: calc(100% + 0.8em); 
+}
+ 
+.button_hola:hover::after,
+.button_hola:hover span::after
+{
+  transform: scaleY(0);
+}
+ 
+.button_hola:hover::before,
+.button_hola:hover span::before
+{
+  transform: scaleX(0);
+}
+ 
+.button_hola:hover span::after,
+.button_hola:hover span::before
+{
+  opacity: 0;
+}
+
+/* ПОШЛИ КНОПКИ CANCEL */

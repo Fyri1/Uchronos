@@ -228,23 +228,27 @@ const Calendar = () => {
                 </div>
 
                 <div class="text-field text-field_floating-2">
-
+                  {/* this will make checkbox wiyh color  */}
                   <input className='text-field__input' id='colorInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.backgroundColor : ''}></input>
                   <label className='text-field__label' htmlFor='color'>Color</label>
-                {/* this will make checkbox wiyh color  */}
+                
                 </div>
 
               <div>
-                <button onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setPopupActive)}>
+                <button  onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setPopupActive)}>
                   {
                     newEventInfo?.event?.id
                     ?
-                    <label>Update</label>
+                    <div class="button_hola">
+                      <label>Update</label>
+                    </div>
                     :
-                    <label>Create</label>
+                    <div class="button_hola">
+                      <label>Create</label>
+                    </div>
                   }
                 </button>
-                <button onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
+                <button class="button_hola_cancel" onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
                 {
                   newEventInfo && Object.keys(newEventInfo).length === 4
                   ?
