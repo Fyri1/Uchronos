@@ -11,14 +11,23 @@ body {
 }
 
 
-.day_calendar{
-  width: 120vh;
+.demo-app-main{
+  width: 100%;
   left: 20%;
   height: 120vh;
-  position: fixed;
+
 }
+.fc-day:hover{
+  background: #1519f325;
+  cursor: pointer;
 
 
+}
+/* редкая хуета */
+.fc{
+  height: 95vh;
+}
+/* редкая хуета */
 
 .calendarName{
   background-color:#74992e;
@@ -31,7 +40,7 @@ body {
 #mainId{
   float: left;
 
-  position: fixed;
+  
   border: 1px solid #000;
   margin: 10px;
   top:20vh;

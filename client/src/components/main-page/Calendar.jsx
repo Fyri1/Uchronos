@@ -211,7 +211,7 @@ const Calendar = () => {
               
                 <div className="text-field text-field_floating-2">
                   
-                  <input className='text-field__input' type="text" id='titleInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : ''}></input>
+                  <input className='text-field__input' type="text" id='titleInput' value={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : ''}></input>
                   <label className='text-field__label'id = "title2"   htmlFor='title'>Title</label>
                 </div>
 
@@ -284,7 +284,7 @@ const Calendar = () => {
                     headerToolbar={{
                       left: 'prev,next today',
                       center: 'title',
-                      right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
+                      right: 'dayGridMonth,timeGridWeek,timeGridDay,listYear',
                     }}
                     initialView="dayGridMonth"
                     editable={true}
