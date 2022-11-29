@@ -209,25 +209,25 @@ const Calendar = () => {
             <Popup active={popupActive} setActive={setPopupActive}>
               <div className = 'Greetings'><p>Hi GERMAN PIDOR!</p></div>
               
-                <div class="text-field text-field_floating-2">
+                <div className="text-field text-field_floating-2">
                   
                   <input className='text-field__input' type="text" id='titleInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : ''}></input>
                   <label className='text-field__label'id = "title2"   htmlFor='title'>Title</label>
                 </div>
 
-                <div class="text-field text-field_floating-2">
+                <div className="text-field text-field_floating-2">
                   
                   <input className='text-field__input' id='descriptionInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 && eventsElements.find(item => item.id === newEventInfo.event.id) ? eventsElements.find(item => item.id === newEventInfo.event.id).description : ''}></input>
                   <label className='text-field__label'id = "title" htmlFor='description'>Description</label>
                 </div>
 
-                <div class="text-field text-field_floating-2">
+                <div className="text-field text-field_floating-2">
                   
                   <input className='text-field__input' id='event_endInput'></input>
                   <label className='text-field__label'id = "title" htmlFor='event_end'>Duration</label>
                 </div>
 
-                <div class="text-field text-field_floating-2">
+                <div className="text-field text-field_floating-2">
                   {/* this will make checkbox wiyh color  */}
                   <input className='text-field__input' id='colorInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.backgroundColor : ''}></input>
                   <label className='text-field__label' htmlFor='color'>Color</label>
@@ -239,20 +239,20 @@ const Calendar = () => {
                   {
                     newEventInfo?.event?.id
                     ?
-                    <div class="button_hola" id ="button_hola_create" >
+                    <div className="button_hola" id ="button_hola_create" >
                       <label>Update</label>
                     </div>
                     :
-                    <div class="button_hola"  id ="button_hola_create">
+                    <div className="button_hola"  id ="button_hola_create">
                       <label>Create</label>
                     </div>
                   }
                 </button>
-                <button class="button_hola" id ="button_hola_cancel" onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
+                <button className="button_hola" id ="button_hola_cancel" onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
                 {
                   newEventInfo && Object.keys(newEventInfo).length === 4
                   ?
-                  <button class="button_hola" id ="button_hola_delete" onClick={() => handleDateDelete(newEventInfo, setPopupActive)}>Delete</button>
+                  <button className="button_hola" id ="button_hola_delete" onClick={() => handleDateDelete(newEventInfo, setPopupActive)}>Delete</button>
                   :
                   null
                 }
@@ -273,40 +273,40 @@ const Calendar = () => {
               <div className="demo-app-main" >
                 
                 <EventModal />
-                
-                <FullCalendar
-                  plugins={[
-                    dayGridPlugin,
-                    timeGridPlugin,
-                    interactionPlugin,
-                    listPlugin,
-                  ]}
-                  headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
-                  }}
-                  initialView="dayGridMonth"
-                  editable={true}
-                  selectable={true}
-                  selectMirror={true}
-                  dayMaxEvents={true}
-                  weekends={true}
-                  initialEvents={eventsElements}
-                  select={(selectInfo) => {
-                    setNewEventInfo(selectInfo);
-                    setPopupActive(true);
-                  }}
-                  eventContent={renderEventContent}
-                  eventClick={(selectInfo) => {
-                    setNewEventInfo(selectInfo);
-                    setPopupActive(true);
-                  }}
-                  eventDrop={handleEvent}
-                  eventResize={handleEvent}
-                  eventsSet={handleEvents}
-                />
-                
+                <div className="day_calendar" >
+                  <FullCalendar
+                    plugins={[
+                      dayGridPlugin,
+                      timeGridPlugin,
+                      interactionPlugin,
+                      listPlugin,
+                    ]}
+                    headerToolbar={{
+                      left: 'prev,next today',
+                      center: 'title',
+                      right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
+                    }}
+                    initialView="dayGridMonth"
+                    editable={true}
+                    selectable={true}
+                    selectMirror={true}
+                    dayMaxEvents={true}
+                    weekends={true}
+                    initialEvents={eventsElements}
+                    select={(selectInfo) => {
+                      setNewEventInfo(selectInfo);
+                      setPopupActive(true);
+                    }}
+                    eventContent={renderEventContent}
+                    eventClick={(selectInfo) => {
+                      setNewEventInfo(selectInfo);
+                      setPopupActive(true);
+                    }}
+                    eventDrop={handleEvent}
+                    eventResize={handleEvent}
+                    eventsSet={handleEvents}
+                  />
+                </div>
               </div>
             </div>
           </div>

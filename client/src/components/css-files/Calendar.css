@@ -19,9 +19,10 @@ body {
 .selected{
   background-color:#302e99;
 }
-.main_context{
+.day_calendar{
+  width: 80%;
+  left: 20%;
   
-
 }
 #mainId{
   float: left;
