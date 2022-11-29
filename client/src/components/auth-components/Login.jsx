@@ -78,10 +78,6 @@ const Login = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  console.log(
-    (formik.errors?.login ? formik.errors.login : null) ||
-      (errorCringe ? errorCringe : null)
-  );
   return (
     <form
       onSubmit={formik.handleSubmit}
