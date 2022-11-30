@@ -10,6 +10,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
 import Popup from './EventPopup.jsx';
+import '../css-files/Calendar.css';
+import bootstrapPlugin from '@fullcalendar/bootstrap';
 
 const handleDateSelect = async (
   selectInfo,
@@ -185,13 +187,24 @@ const Calendar = () => {
   const calendarsElements = calendarsList.map((calendar, i, arr) => {
     // Find and mark the last element of loaded posts (for endless scroll)
     return (
-      <div className="calendarName">
-        <div>{calendar.title}</div>
-        {calendar.title === displayedCalendarData.title ? (
-          <div> - selected</div>
-        ) : (
-          <div></div>
-        )}
+      <div>
+        <div className="calendarName">
+
+          <div>{calendar.title}</div>
+          {
+            calendar.title === displayedCalendarData.title
+            ?
+            <div className='selected'> - selected</div>
+            :
+            <div></div>
+          }
+        </div>
+        <div class="radio">
+          <label class="custom-radio">
+            <input type="radio" name="color" value="indigo"/>
+            <span>Indigo</span>
+          </label>
+        </div>
       </div>
     );
   });
@@ -216,152 +229,126 @@ const Calendar = () => {
     end: e.end.date,
   }));
   return (
-    <div className="demo-app ">
-      {/* {renderSidebar()} */}
-      {!loading ? (
-        <div>
-          <Popup active={popupActive} setActive={setPopupActive}>
-            <p>ebat ti pidor!</p>
-            <div>
-              <label htmlFor="title">Title:</label>
-              <input
-                className="eventInput"
-                id="titleInput"
-                placeholder={
-                  newEventInfo && Object.keys(newEventInfo).length === 4
-                    ? newEventInfo.event.title
-                    : 'nasri v title dalbaeb'
-                }
-              ></input>
-            </div>
+    <div className='kokon'>
+      <div className="demo-app ">
+        {/* {renderSidebar()} */}
+        {
+          !loading
+          ?
+          <div>
 
-            <div>
-              <label htmlFor="description">Description:</label>
-              <input
-                className="eventInput"
-                id="descriptionInput"
-                placeholder={
-                  newEventInfo &&
-                  Object.keys(newEventInfo).length === 4 &&
-                  eventsElements.find(
-                    (item) => item.id === newEventInfo.event.id
-                  )
-                    ? eventsElements.find(
-                        (item) => item.id === newEventInfo.event.id
-                      ).description
-                    : 'nasri v description dalbaeb'
-                }
-              ></input>
-            </div>
+      
+            <Popup active={popupActive} setActive={setPopupActive}>
+              <div className = 'Greetings'><p>Hi GERMAN PIDOR!</p></div>
+              
+                <div className="text-field text-field_floating-2">
+                  
+                  <input className='text-field__input' type="text" id='titleInput' value={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : ''}></input>
+                  <label className='text-field__label'id = "title2"   htmlFor='title'>Title</label>
+                </div>
 
-            <div>
-              <label htmlFor="event_end">Duration:</label>
-              <input className="eventInput" id="event_endInput"></input>
-            </div>
+                <div className="text-field text-field_floating-2">
+                  
+                  <input className='text-field__input' id='descriptionInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 && eventsElements.find(item => item.id === newEventInfo.event.id) ? eventsElements.find(item => item.id === newEventInfo.event.id).description : ''}></input>
+                  <label className='text-field__label'id = "title" htmlFor='description'>Description</label>
+                </div>
 
-            <div>
-              <label htmlFor="color">Color:</label>
-              <input
-                className="eventInput"
-                id="colorInput"
-                placeholder={
-                  newEventInfo && Object.keys(newEventInfo).length === 4
-                    ? newEventInfo.event.backgroundColor
-                    : 'nasri v color dalbaeb'
-                }
-              ></input>
-            </div>
+                <div className="text-field text-field_floating-2">
+                  
+                  <input className='text-field__input' id='event_endInput'></input>
+                  <label className='text-field__label'id = "title" htmlFor='event_end'>Duration</label>
+                </div>
 
-            <div>
-              <button
-                onClick={() =>
-                  handleDateSelect(
-                    newEventInfo,
-                    displayedCalendarData,
-                    setPopupActive
-                  )
-                }
-              >
-                {newEventInfo?.event?.id ? (
-                  <label>Update</label>
-                ) : (
-                  <label>Create</label>
-                )}
-              </button>
-              <button
-                onClick={() => {
-                  setPopupActive(false);
-                  console.log(Object.keys(newEventInfo).length);
-                }}
-              >
-                Cancel
-              </button>
-              {newEventInfo && Object.keys(newEventInfo).length === 4 ? (
-                <button
-                  onClick={() => handleDateDelete(newEventInfo, setPopupActive)}
-                >
-                  Delete
-                </button>
-              ) : null}
-            </div>
-          </Popup>
+                <div className="text-field text-field_floating-2">
+                  {/* this will make checkbox wiyh color  */}
+                  <input className='text-field__input' id='colorInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.backgroundColor : ''}></input>
+                  <label className='text-field__label' htmlFor='color'>Color</label>
+                
+                </div>
 
-          <div className="sidebar">
-            <div>
-              <div>{calendarsElements}</div>
               <div>
-                <input placeholder="Enter event name"></input>
-                <button onClick={searchButtonHandle}></button>
+                <button className='button_create' onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setPopupActive)}>
+                  {
+                    newEventInfo?.event?.id
+                    ?
+                    <div className="button_hola" id ="button_hola_create" >
+                      <label>Update</label>
+                    </div>
+                    :
+                    <div className="button_hola"  id ="button_hola_create">
+                      <label>Create</label>
+                    </div>
+                  }
+                </button>
+                <button className="button_hola" id ="button_hola_cancel" onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
+                {
+                  newEventInfo && Object.keys(newEventInfo).length === 4
+                  ?
+                  <button className="button_hola" id ="button_hola_delete" onClick={() => handleDateDelete(newEventInfo, setPopupActive)}>Delete</button>
+                  :
+                  null
+                }
+              </div>
+            </Popup>
+
+            <div className='main_context'>
+              <div className='sidebar' id ="mainId">
+                <div>
+                  <div>{calendarsElements}</div>
+                  
+                  <div>
+                    {/* <input placeholder='Enter event name'></input>  тимофей сказал что сделает поиск  */}
+                    {/* <button onClick={searchButtonHandle}></button> */}
+                  </div>
+                </div>
+              </div>
+
+              <div className="demo-app-main" >
+                
+                <EventModal />
+                <div className="day_calendar" >
+                  <FullCalendar
+                    plugins={[
+                      dayGridPlugin,
+                      bootstrapPlugin,
+                      timeGridPlugin,
+                      interactionPlugin,
+                      listPlugin,
+                    ]}
+                    headerToolbar={{
+                      left: 'prev,next today',
+                      center: 'title',
+                      right: 'dayGridMonth,timeGridWeek,timeGridDay,listYear',
+                    }}
+                    initialView="dayGridMonth"
+                    editable={true}
+                    themeSystem="bootstrap"
+                    selectable={true}
+                    selectMirror={true}
+                    dayMaxEvents={true}
+                    weekends={true}
+                    initialEvents={eventsElements}
+                    select={(selectInfo) => {
+                      setNewEventInfo(selectInfo);
+                      setPopupActive(true);
+                    }}
+                    eventContent={renderEventContent}
+                    eventClick={(selectInfo) => {
+                      setNewEventInfo(selectInfo);
+                      setPopupActive(true);
+                    }}
+                    eventDrop={handleEvent}
+                    eventResize={handleEvent}
+                    eventsSet={handleEvents}
+                  />
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="demo-app-main">
-            <EventModal />
-            <FullCalendar
-              plugins={[
-                dayGridPlugin,
-                timeGridPlugin,
-                interactionPlugin,
-                listPlugin,
-              ]}
-              headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'year,dayGridMonth,timeGridWeek,timeGridDay,listYear',
-              }}
-              initialView="dayGridMonth"
-              editable={true}
-              selectable={true}
-              selectMirror={true}
-              dayMaxEvents={true}
-              weekends={true}
-              initialEvents={[...eventsElements, ...holidaysElements]}
-              select={(selectInfo) => {
-                setNewEventInfo(selectInfo);
-                setPopupActive(true);
-              }}
-              eventContent={renderEventContent}
-              eventClick={(selectInfo) => {
-                setNewEventInfo(selectInfo);
-                setPopupActive(true);
-              }}
-              eventDrop={handleEvent}
-              eventResize={handleEvent}
-              eventsSet={handleEvents}
-              // eventDidMount={(arg) => {
-              //   console.log(arg.event.extendedProps);
-              // }}
-              // eventClassNames={function (arg) {
-              //   if (arg.event.extendedProps.description === 'dada negr') {
-              //   }
-              // }}
-            />
-          </div>
-        </div>
-      ) : (
-        <div></div>
-      )}
+          :
+          <div></div>
+        }
+      </div>
     </div>
   );
 };

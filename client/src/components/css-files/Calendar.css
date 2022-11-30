@@ -1,0 +1,275 @@
+body {
+    overflow-y: hidden;
+}
+.day{
+    background-color: #74992e;
+    /* border: 50px solid darkblue; */
+}
+.Greetings{
+    text-align:  center;
+    font: small-caps bold 24px sans-serif;
+}
+
+
+.demo-app-main{
+  width: 100%;
+  left: 20%;
+  height: 120vh;
+
+}
+.fc-day:hover{
+  background: #1519f325;
+  cursor: pointer;
+
+
+}
+
+.fc .fc-button-primary {
+  background-color: blue;
+}
+
+.fc .fc-button-primary:not(:disabled):active,
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background: red;
+}
+
+/* редкая хуета */
+.fc{
+  height: 95vh;
+}
+/* редкая хуета */
+
+
+.selected{
+  background-color:#302e99;
+}
+
+#mainId{
+  float: left;  
+  border: 1px solid #000;
+  margin: 10px;
+  top:20vh;
+  height: 20vh;
+  
+}
+.calendarName{
+  background-color:#74992e;
+  top: 30px;
+  width: 25vh;
+  
+}
+
+
+.text-field {
+  margin-bottom: 1rem;
+}
+
+.text-field__label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.text-field__input {
+  display: block;
+  width: 95%;
+  height: calc(2.25rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.text-field__input[type="search"]::-webkit-search-decoration,
+.text-field__input[type="search"]::-webkit-search-cancel-button,
+.text-field__input[type="search"]::-webkit-search-results-button,
+.text-field__input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+}
+
+.text-field__input::placeholder {
+  color: #212529;
+  opacity: 0.4;
+}
+
+.text-field__input:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #bdbdbd;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
+}
+
+.text-field__input:disabled,
+.text-field__input[readonly] {
+  background-color: #f5f5f5;
+  opacity: 1;
+}
+
+/* with floating label */
+.text-field_floating-2 {
+  position: relative;
+}
+
+.text-field_floating-2 .text-field__input {
+  height: calc(2.5rem + 2px);
+  padding: 0.5rem 0.75rem;
+}
+
+.text-field_floating-2 .text-field__label {
+  position: absolute;
+  top: 50%;
+  left: 0.3125rem;
+  display: flex;
+  transform: translateY(-50%);
+  pointer-events: none;
+  border: none;
+  background-color: #fff;
+  color: #757575;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  transition: top 0.1s ease-in-out, scale 0.1s ease-in-out;
+}
+
+.text-field_floating-2 .text-field__input::-moz-placeholder {
+  color: transparent;
+}
+
+.text-field_floating-2 .text-field__input::placeholder {
+  color: transparent;
+}
+
+.text-field_floating-2 .text-field__input:focus~.text-field__label,
+.text-field_floating-2 .text-field__input:not(:placeholder-shown)~.text-field__label {
+  top: 0;
+  transform: translateY(-50%) scale(0.80);
+}
+
+#title{
+    left: 0%;
+}
+/* ПОШЛИ КНОПКИ CREATR */
+
+.button_create{
+/*  ГЕРМАН СДЕЛАЙ ТУТ КРАСИВО КНОПКИ */
+}
+.button_hola,
+.button_hola::before,
+.button_hola::after,
+.button_hola span,
+.button_hola span::before,
+.button_hola span::after
+{
+  transition: all ease .5s;
+}
+ 
+.button_hola{
+  position: relative;
+  display: inline-block;
+  padding: 0.2em;
+  margin: 1em;
+  border: solid 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+ 
+/* .button_hola:hover
+{
+  box-shadow: 0 0 1em .5em rgba(26, 63, 185, 0.671);
+} */
+ 
+#button_hola_create:hover{
+  box-shadow: 0 0 1em .5em rgba(26, 185, 74, 0.671);
+
+}
+#button_hola_cancel:hover{
+  box-shadow: 0 0 1em .5em rgba(22, 92, 184, 0.671);
+ 
+}
+#button_hola_delete:hover{
+  box-shadow: 0 0 1em .5em rgba(184, 22, 57, 0.671);
+}
+.button_hola span
+{
+  display: inline-block;
+  width: 100%;
+  padding: 0.6em 2em;
+
+}
+ 
+.button_hola:hover span
+{
+  background-color: #fff;
+  color: #112;
+}
+ 
+.button_hola::before,
+.button_hola::after,
+.button_hola span::before,
+.button_hola span::after
+{
+  content: '';
+  position: absolute;
+  border: 1px;
+}
+ 
+.button_hola::before,
+.button_hola span::before
+{
+  border-style: solid none;  
+}
+ 
+/* полоски сверху кнопки */
+.button_hola::before,
+.button_hola span::after{      
+  left: 0;
+  top: -0.4em;
+  width: 100%; 
+  height: calc(100% + 0.8em);
+}
+ 
+.button_hola::after,
+.button_hola span::after
+{
+  border-style: none solid;   
+}
+ 
+/* полоски снизу кнопки */
+.button_hola::after,
+.button_hola span::before
+{
+  top: 0;
+  left: -0.4em;
+  height: 100%;
+  width: calc(100% + 0.8em); 
+}
+ 
+.button_hola:hover::after,
+.button_hola:hover span::after
+{
+  transform: scaleY(0);
+}
+ 
+.button_hola:hover::before,
+.button_hola:hover span::before
+{
+  transform: scaleX(0);
+}
+ 
+.button_hola:hover span::after,
+.button_hola:hover span::before
+{
+  opacity: 0;
+}
+
+/* ПОШЛИ КНОПКИ CANCEL */
+
