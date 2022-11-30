@@ -293,13 +293,15 @@ const Calendar = () => {
                 }
               </div>
             </Popup>
-
+            
+            <div className='img'><img src="../public/photo/logo.jpg"></img></div>
+            <p>Это  LOGo</p>
             <div className='main_context'>
               
               <div className='sidebar' id ="mainId">
                 
                   <div className='border1'>
-                    <div>{calendarsElements}</div>
+                    <div >{calendarsElements}</div>
                     <div class="d1">
       
                       {/* тимофей сказал поиск делать  */}
@@ -315,8 +317,8 @@ const Calendar = () => {
 
               <div className="demo-app-main" >
                 
-                <EventModal />
-                <div className="day_calendar" >
+                {/* <EventModal /> */}
+                <div className="day_calendar" id='calendar'>
                  <FullCalendar
                     plugins={[
                       dayGridPlugin,

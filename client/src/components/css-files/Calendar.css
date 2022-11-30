@@ -46,9 +46,13 @@ body {
 .selected{
   background-color:#302e99;
 }
-
+.img{
+  height: 0vh; 
+ 
+  padding:0px 4vh;
+}
 #mainId{
-  padding:15vh 0px;
+  padding:25vh 0px;
   float: left;  
  
   margin: 15px;
@@ -58,16 +62,6 @@ body {
   /* ширина бара ебара */
   
 }
-.border1{
-  border: 1px solid;
-}
-.calendarName{
-  background-color:#74992e;
-  top: 30px;
-  width: 20vh;
-  
-}
-
 
 .text-field {
   margin-bottom: 1rem;
@@ -288,10 +282,23 @@ body {
 
 .all_list{
   background-color: #04AA6D;
-
+  line-height: 30px;
+  border-width: 0;
+  border: 1px solid;
+  text-transform: uppercase;
+  border-radius: 10px;
+  text-align: center;
 }
 
-
+.border1{
+  background-color: #b5d4d2;
+  line-height: 30px;
+  border-width: 0;
+  
+  text-transform: uppercase;
+  border-radius: 10px;
+  text-align: center;
+}
 
 .d1 {
  display: flex;
