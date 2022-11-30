@@ -11,7 +11,6 @@ import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
 import Popup from './EventPopup.jsx';
 import '../css-files/Calendar.css';
-import bootstrapPlugin from '@fullcalendar/bootstrap';
 
 const handleDateSelect = async (
   selectInfo,
@@ -236,8 +235,6 @@ const Calendar = () => {
           !loading
           ?
           <div>
-
-      
             <Popup active={popupActive} setActive={setPopupActive}>
               <div className = 'Greetings'><p>Hi GERMAN PIDOR!</p></div>
               
@@ -310,7 +307,6 @@ const Calendar = () => {
                   <FullCalendar
                     plugins={[
                       dayGridPlugin,
-                      bootstrapPlugin,
                       timeGridPlugin,
                       interactionPlugin,
                       listPlugin,
@@ -322,12 +318,11 @@ const Calendar = () => {
                     }}
                     initialView="dayGridMonth"
                     editable={true}
-                    themeSystem="bootstrap"
                     selectable={true}
                     selectMirror={true}
                     dayMaxEvents={true}
                     weekends={true}
-                    initialEvents={eventsElements}
+                    initialEvents={[...eventsElements, ...holidaysElements]}
                     select={(selectInfo) => {
                       setNewEventInfo(selectInfo);
                       setPopupActive(true);
