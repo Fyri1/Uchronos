@@ -10,10 +10,11 @@ import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
 import Popup from './EventPopup.jsx';
 import '../css-files/Calendar.css';
-import bootstrapPlugin from '@fullcalendar/bootstrap';
+// import bootstrapPlugin from '@fullcalendar/bootstrap';
 
 const handleDateSelect = async (selectInfo, displayedCalendarData, setPopupActive) => {
   let calendarApi = selectInfo.view.calendar;
+
   // console.log(selectInfo);
   calendarApi.unselect(); // clear date selection
   try {
@@ -167,27 +168,49 @@ const Calendar = () => {
     });
   };
 
+  const handleCalendarChange = async (event) => {
+    try {
+      console.log("ishy pizdec");
+      console.log(displayedCalendarData);
+      const selectedCalendar = calendarsList.find(calendar => calendar.title === event.currentTarget.id);
+      console.log(selectedCalendar.id);
+      const events = await $api.get('/calendar/event/' + selectedCalendar.id);
+      console.log("pizos");
+
+      setDisplayedCalendarData({
+        ...selectedCalendar,
+        events: events.data.data
+      });
+    } catch (e) {
+      console.log('401! ' + e);
+    }
+  }
+
   // TEMP
   const calendarsElements = calendarsList.map((calendar, i, arr) => {
     // Find and mark the last element of loaded posts (for endless scroll)
+
+    // var line =calendar.title.split(":", 1);
+
+  //   <div className="sidebar">
+  //   <a className="active" href="#home">Home</a>
+  //   <a href="#news">News</a>
+  //   <a href="#contact">Contact</a>
+
+  // </div>
     return (
       <div>
-        <div className="calendarName">
-
-          <div>{calendar.title}</div>
+        <div className="sidebar" id={calendar.title} onClick={handleCalendarChange}>
+    
+        
           {
-            calendar.title === displayedCalendarData.title
+           calendar.title === displayedCalendarData.title
             ?
-            <div className='selected'> - selected</div>
+            <div className="all_list">{calendar.title}</div>
             :
-            <div></div>
+            <div className="" >{calendar.title}</div>
           }
-        </div>
-        <div class="radio">
-          <label class="custom-radio">
-            <input type="radio" name="color" value="indigo"/>
-            <span>Indigo</span>
-          </label>
+         
         </div>
       </div>
     )
@@ -196,6 +219,7 @@ const Calendar = () => {
   // TEMP
   // console.log(displayedCalendarData);
   const eventsElements = displayedCalendarData.events.map((event, i, arr) => {
+    console.log("map pizdec");
     return {
       id: event.id,
       title: event.title,
@@ -205,7 +229,7 @@ const Calendar = () => {
       end: event.event_end
     }
   });
-
+  // console.log(eventsElements);
 
   return (
     <div className='kokon'>
@@ -271,25 +295,31 @@ const Calendar = () => {
             </Popup>
 
             <div className='main_context'>
+              
               <div className='sidebar' id ="mainId">
-                <div>
-                  <div>{calendarsElements}</div>
-                  
-                  <div>
-                    {/* <input placeholder='Enter event name'></input>  тимофей сказал что сделает поиск  */}
-                    {/* <button onClick={searchButtonHandle}></button> */}
+                
+                  <div className='border1'>
+                    <div>{calendarsElements}</div>
+                    <div class="d1">
+      
+                      {/* тимофей сказал поиск делать  */}
+                      <input type="text" placeholder='Enter event name'></input>
+                      <div className='koko2'></div>
+                      <button className='button_search' onClick={searchButtonHandle}></button>
+                      
+                      {/* НЕ РАБОТАЕТ КНОПКАААА!!!!!!!! ЕЕ НЕТ! */}
+                      
+                    </div>
                   </div>
-                </div>
               </div>
 
               <div className="demo-app-main" >
                 
                 <EventModal />
                 <div className="day_calendar" >
-                  <FullCalendar
+                 <FullCalendar
                     plugins={[
                       dayGridPlugin,
-                      bootstrapPlugin,
                       timeGridPlugin,
                       interactionPlugin,
                       listPlugin,
@@ -301,7 +331,6 @@ const Calendar = () => {
                     }}
                     initialView="dayGridMonth"
                     editable={true}
-                    themeSystem="bootstrap"
                     selectable={true}
                     selectMirror={true}
                     dayMaxEvents={true}
