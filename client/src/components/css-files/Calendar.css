@@ -23,31 +23,41 @@ body {
 
 
 }
+
+.fc .fc-button-primary {
+  background-color: blue;
+}
+
+.fc .fc-button-primary:not(:disabled):active,
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background: red;
+}
+
 /* редкая хуета */
 .fc{
   height: 95vh;
 }
 /* редкая хуета */
 
-.calendarName{
-  background-color:#74992e;
-  max-width: 295vh;
-}
+
 .selected{
   background-color:#302e99;
 }
 
 #mainId{
-  float: left;
-
-  
+  float: left;  
   border: 1px solid #000;
   margin: 10px;
   top:20vh;
   height: 20vh;
   
 }
-
+.calendarName{
+  background-color:#74992e;
+  top: 30px;
+  width: 25vh;
+  
+}
 
 
 .text-field {

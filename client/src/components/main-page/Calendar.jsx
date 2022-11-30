@@ -10,6 +10,8 @@ import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
 import Popup from './EventPopup.jsx';
 import '../css-files/Calendar.css';
+import bootstrapPlugin from '@fullcalendar/bootstrap';
+
 const handleDateSelect = async (selectInfo, displayedCalendarData, setPopupActive) => {
   let calendarApi = selectInfo.view.calendar;
   // console.log(selectInfo);
@@ -169,15 +171,24 @@ const Calendar = () => {
   const calendarsElements = calendarsList.map((calendar, i, arr) => {
     // Find and mark the last element of loaded posts (for endless scroll)
     return (
-      <div className="calendarName">
-        <div>{calendar.title}</div>
-        {
-          calendar.title === displayedCalendarData.title
-          ?
-          <div className='selected'> - selected</div>
-          :
-          <div></div>
-        }
+      <div>
+        <div className="calendarName">
+
+          <div>{calendar.title}</div>
+          {
+            calendar.title === displayedCalendarData.title
+            ?
+            <div className='selected'> - selected</div>
+            :
+            <div></div>
+          }
+        </div>
+        <div class="radio">
+          <label class="custom-radio">
+            <input type="radio" name="color" value="indigo"/>
+            <span>Indigo</span>
+          </label>
+        </div>
       </div>
     )
   });
@@ -263,9 +274,10 @@ const Calendar = () => {
               <div className='sidebar' id ="mainId">
                 <div>
                   <div>{calendarsElements}</div>
+                  
                   <div>
-                    <input placeholder='Enter event name'></input>
-                    <button onClick={searchButtonHandle}></button>
+                    {/* <input placeholder='Enter event name'></input>  тимофей сказал что сделает поиск  */}
+                    {/* <button onClick={searchButtonHandle}></button> */}
                   </div>
                 </div>
               </div>
@@ -277,6 +289,7 @@ const Calendar = () => {
                   <FullCalendar
                     plugins={[
                       dayGridPlugin,
+                      bootstrapPlugin,
                       timeGridPlugin,
                       interactionPlugin,
                       listPlugin,
@@ -288,6 +301,7 @@ const Calendar = () => {
                     }}
                     initialView="dayGridMonth"
                     editable={true}
+                    themeSystem="bootstrap"
                     selectable={true}
                     selectMirror={true}
                     dayMaxEvents={true}
