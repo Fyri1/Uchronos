@@ -93,7 +93,6 @@ const Register = () => {
       }
     },
   });
-  console.log(errorValid);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);

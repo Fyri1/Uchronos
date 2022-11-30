@@ -23,21 +23,26 @@ class CalendarEvent {
   }
 
   async getAllEventsForCalendarId(calendar_id) {
-    const data = await client('calendar_events')
-      .select(
-        'id',
-        'user_id',
-        'calendar_id',
-        'title',
-        'description',
-        'color',
-        'created_at',
-        'event_start',
-        'event_end'
-      )
-      .where('calendar_id', '=', calendar_id);
+    try {
+      const data = await client('calendar_events')
+        .select(
+          'id',
+          'user_id',
+          'calendar_id',
+          'title',
+          'description',
+          'color',
+          'created_at',
+          'event_start',
+          'event_end'
+        )
+        .where('calendar_id', '=', calendar_id);
 
-    return data;
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 
   async addCalendarEvent({
@@ -69,19 +74,18 @@ class CalendarEvent {
         throw err;
       }
     }
-	}
+  }
 
   async updateCalendarEvent({
-		event_id,
-		user_id,
-		title,
-		description,
-		color,
-		event_start,
-		event_end
-	}) {
-		try {
-
+    event_id,
+    user_id,
+    title,
+    description,
+    color,
+    event_start,
+    event_end,
+  }) {
+    try {
       let itemsToUpdate = {};
       if (user_id) {
         itemsToUpdate = { ...itemsToUpdate, user_id };
@@ -101,16 +105,18 @@ class CalendarEvent {
       if (event_end) {
         itemsToUpdate = { ...itemsToUpdate, event_end };
       }
-      
+
       console.log(itemsToUpdate);
-      await client('calendar_events').update(itemsToUpdate).where('id', '=', event_id);
+      await client('calendar_events')
+        .update(itemsToUpdate)
+        .where('id', '=', event_id);
     } catch (err) {
       if (!err.toString().match(/ignore/)) {
         console.log(err);
         throw err;
       }
     }
-	}
+  }
 
   async deleteCalendarEvent(event_id) {
     try {
@@ -123,7 +129,6 @@ class CalendarEvent {
       }
     }
   }
-
 }
 
 export default new CalendarEvent();

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import $api from '../../services/api.js';
+import axios from 'axios';
 import '@fullcalendar/react/dist/vdom';
 import FullCalendar, { formatDate } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -10,7 +11,11 @@ import ModalsContext from '../../contex/modalsContext.js';
 import EventModal from '../modals/EventModal.jsx';
 import Popup from './EventPopup.jsx';
 
-const handleDateSelect = async (selectInfo, displayedCalendarData, setPopupActive) => {
+const handleDateSelect = async (
+  selectInfo,
+  displayedCalendarData,
+  setPopupActive
+) => {
   let calendarApi = selectInfo.view.calendar;
   // console.log(selectInfo);
   calendarApi.unselect(); // clear date selection
@@ -23,10 +28,8 @@ const handleDateSelect = async (selectInfo, displayedCalendarData, setPopupActiv
       color: document.getElementById('colorInput').value,
       start: selectInfo.startStr,
       end: document.getElementById('event_endInput').value
-           ?
-           document.getElementById('event_endInput').value
-           :
-           selectInfo.endStr
+        ? document.getElementById('event_endInput').value
+        : selectInfo.endStr,
     };
 
     // Check if such event was already created
@@ -41,7 +44,8 @@ const handleDateSelect = async (selectInfo, displayedCalendarData, setPopupActiv
       }
 
       if (document.getElementById('descriptionInput').value) {
-        selectInfo.description = document.getElementById('descriptionInput').value;
+        selectInfo.description =
+          document.getElementById('descriptionInput').value;
       }
 
       if (document.getElementById('colorInput').value) {
@@ -51,14 +55,17 @@ const handleDateSelect = async (selectInfo, displayedCalendarData, setPopupActiv
       }
 
       selectInfo.start = selectInfo.event.startStr;
-      selectInfo.end = selectInfo.event.endStr;      
+      selectInfo.end = selectInfo.event.endStr;
       calendarApi.getEventById(selectInfo.event.id).remove();
       calendarApi.addEvent(selectInfo);
     } else {
-      await $api.post('/calendar/event/' + displayedCalendarData.id, initialEvents);
+      await $api.post(
+        '/calendar/event/' + displayedCalendarData.id,
+        initialEvents
+      );
       calendarApi.addEvent(initialEvents);
     }
-    
+
     setPopupActive(false);
   } catch (e) {
     console.log('401! ' + e);
@@ -68,7 +75,7 @@ const handleDateSelect = async (selectInfo, displayedCalendarData, setPopupActiv
 const handleDateDelete = async (selectInfo, setPopupActive) => {
   try {
     await $api.delete('/calendar/event/' + selectInfo.event.id);
-    
+
     setPopupActive(false);
     let calendarApi = selectInfo.view.calendar;
     calendarApi.getEventById(selectInfo.event.id).remove();
@@ -79,11 +86,10 @@ const handleDateDelete = async (selectInfo, setPopupActive) => {
 
 const searchButtonHandle = async () => {
   try {
-    
   } catch (e) {
     console.log('401! ' + e);
   }
-}
+};
 
 const renderEventContent = (eventInfo) => {
   // console.log(eventInfo);
@@ -114,9 +120,10 @@ const Calendar = () => {
   const [loading, setLoading] = useState(true);
   const [calendarsList, setCalendarsList] = useState([]);
   const [displayedCalendarData, setDisplayedCalendarData] = useState({
-    id: "",
-    events: []
+    id: '',
+    events: [],
   });
+  const [holidays, setHolidays] = useState([]);
   const [popupActive, setPopupActive] = useState();
   const [newEventInfo, setNewEventInfo] = useState();
 
@@ -133,11 +140,20 @@ const Calendar = () => {
   async function OnLoad() {
     try {
       const calendars = await $api.get('/calendar/');
-      setCalendarsList([ ...calendars.data.data ]);
-      
-      const events = await $api.get('/calendar/event/' + calendars.data.data[0].id);
-      setDisplayedCalendarData({ ...calendars.data.data[0], events: events.data.data });
-      
+      setCalendarsList([...calendars.data.data]);
+      const holidays = await axios.get(
+        'https://www.googleapis.com/calendar/v3/calendars/en.ukrainian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyAQvFrMKbaO9Jptp9aMvjLaHeGIIkFgY2k'
+      );
+      setHolidays(holidays.data.items);
+      // console.log(holidays.data.items);
+      const events = await $api.get(
+        '/calendar/event/' + calendars.data.data[0].id
+      );
+      setDisplayedCalendarData({
+        ...calendars.data.data[0],
+        events: events.data.data,
+      });
+
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -147,18 +163,18 @@ const Calendar = () => {
   const { setAnchorEl } = useContext(ModalsContext);
 
   const handleEvent = async (event) => {
-    console.log("ya pidoras");
+    console.log('ya pidoras');
     console.log(event);
     try {
       await $api.patch('/calendar/event/' + event.event.id, {
         event_start: event.event.startStr,
-        event_end: event.event.endStr
+        event_end: event.event.endStr,
       });
     } catch (e) {
       console.log('401! ' + e);
     }
-  }
-  
+  };
+
   const handleEvents = async (events) => {
     setState({
       currentEvents: events,
@@ -171,19 +187,16 @@ const Calendar = () => {
     return (
       <div className="calendarName">
         <div>{calendar.title}</div>
-        {
-          calendar.title === displayedCalendarData.title
-          ?
+        {calendar.title === displayedCalendarData.title ? (
           <div> - selected</div>
-          :
+        ) : (
           <div></div>
-        }
+        )}
       </div>
-    )
+    );
   });
 
   // TEMP
-  // console.log(displayedCalendarData);
   const eventsElements = displayedCalendarData.events.map((event, i, arr) => {
     return {
       id: event.id,
@@ -191,73 +204,119 @@ const Calendar = () => {
       start: event.event_start,
       color: event.color,
       description: event.description,
-      end: event.event_end
-    }
+      end: event.event_end,
+    };
   });
-
-
+  const holidaysElements = holidays.map((e) => ({
+    id: e.id,
+    title: e.summary,
+    start: e.start.date,
+    color: 'blue',
+    description: e.description,
+    end: e.end.date,
+  }));
   return (
     <div className="demo-app ">
       {/* {renderSidebar()} */}
-      {
-        !loading
-        ?
+      {!loading ? (
         <div>
           <Popup active={popupActive} setActive={setPopupActive}>
             <p>ebat ti pidor!</p>
             <div>
-              <label htmlFor='title'>Title:</label>
-              <input className='eventInput' id='titleInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : 'nasri v title dalbaeb'}></input>
-            </div>
-
-            <div>
-              <label htmlFor='description'>Description:</label>
-              <input className='eventInput' id='descriptionInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 && eventsElements.find(item => item.id === newEventInfo.event.id) ? eventsElements.find(item => item.id === newEventInfo.event.id).description : 'nasri v description dalbaeb'}></input>
-            </div>
-
-            <div>
-              <label htmlFor='event_end'>Duration:</label>
-              <input className='eventInput' id='event_endInput'></input>
-            </div>
-
-            <div>
-              <label htmlFor='color'>Color:</label>
-              <input className='eventInput' id='colorInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.backgroundColor : 'nasri v color dalbaeb'}></input>
-            </div>
-
-            <div>
-              <button onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setPopupActive)}>
-                {
-                  newEventInfo?.event?.id
-                  ?
-                  <label>Update</label>
-                  :
-                  <label>Create</label>
+              <label htmlFor="title">Title:</label>
+              <input
+                className="eventInput"
+                id="titleInput"
+                placeholder={
+                  newEventInfo && Object.keys(newEventInfo).length === 4
+                    ? newEventInfo.event.title
+                    : 'nasri v title dalbaeb'
                 }
+              ></input>
+            </div>
+
+            <div>
+              <label htmlFor="description">Description:</label>
+              <input
+                className="eventInput"
+                id="descriptionInput"
+                placeholder={
+                  newEventInfo &&
+                  Object.keys(newEventInfo).length === 4 &&
+                  eventsElements.find(
+                    (item) => item.id === newEventInfo.event.id
+                  )
+                    ? eventsElements.find(
+                        (item) => item.id === newEventInfo.event.id
+                      ).description
+                    : 'nasri v description dalbaeb'
+                }
+              ></input>
+            </div>
+
+            <div>
+              <label htmlFor="event_end">Duration:</label>
+              <input className="eventInput" id="event_endInput"></input>
+            </div>
+
+            <div>
+              <label htmlFor="color">Color:</label>
+              <input
+                className="eventInput"
+                id="colorInput"
+                placeholder={
+                  newEventInfo && Object.keys(newEventInfo).length === 4
+                    ? newEventInfo.event.backgroundColor
+                    : 'nasri v color dalbaeb'
+                }
+              ></input>
+            </div>
+
+            <div>
+              <button
+                onClick={() =>
+                  handleDateSelect(
+                    newEventInfo,
+                    displayedCalendarData,
+                    setPopupActive
+                  )
+                }
+              >
+                {newEventInfo?.event?.id ? (
+                  <label>Update</label>
+                ) : (
+                  <label>Create</label>
+                )}
               </button>
-              <button onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
-              {
-                newEventInfo && Object.keys(newEventInfo).length === 4
-                ?
-                <button onClick={() => handleDateDelete(newEventInfo, setPopupActive)}>Delete</button>
-                :
-                null
-              }
+              <button
+                onClick={() => {
+                  setPopupActive(false);
+                  console.log(Object.keys(newEventInfo).length);
+                }}
+              >
+                Cancel
+              </button>
+              {newEventInfo && Object.keys(newEventInfo).length === 4 ? (
+                <button
+                  onClick={() => handleDateDelete(newEventInfo, setPopupActive)}
+                >
+                  Delete
+                </button>
+              ) : null}
             </div>
           </Popup>
 
-          <div className='sidebar'>
+          <div className="sidebar">
             <div>
               <div>{calendarsElements}</div>
               <div>
-                <input placeholder='Enter event name'></input>
+                <input placeholder="Enter event name"></input>
                 <button onClick={searchButtonHandle}></button>
               </div>
             </div>
           </div>
 
           <div className="demo-app-main">
-            
             <EventModal />
             <FullCalendar
               plugins={[
@@ -277,7 +336,7 @@ const Calendar = () => {
               selectMirror={true}
               dayMaxEvents={true}
               weekends={true}
-              initialEvents={eventsElements}
+              initialEvents={[...eventsElements, ...holidaysElements]}
               select={(selectInfo) => {
                 setNewEventInfo(selectInfo);
                 setPopupActive(true);
@@ -290,16 +349,21 @@ const Calendar = () => {
               eventDrop={handleEvent}
               eventResize={handleEvent}
               eventsSet={handleEvents}
+              // eventDidMount={(arg) => {
+              //   console.log(arg.event.extendedProps);
+              // }}
+              // eventClassNames={function (arg) {
+              //   if (arg.event.extendedProps.description === 'dada negr') {
+              //   }
+              // }}
             />
-            
           </div>
         </div>
-        :
+      ) : (
         <div></div>
-      }
+      )}
     </div>
   );
 };
 
 export default Calendar;
-
