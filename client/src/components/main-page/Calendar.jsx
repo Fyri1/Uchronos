@@ -86,27 +86,14 @@ const handleDateDelete = async (selectInfo, setPopupActive) => {
   }
 };
 
-const searchButtonHandle = async (displayedCalendarData, setDisplayedCalendarData, setEventsElements) => {
-  setDisplayedCalendarData({
-    ...displayedCalendarData,
-    searchParam: document.getElementById('searchInput').value
+const searchButtonHandle = async (testFullCalendar, eventsElements) => {
+  let removeEvents = testFullCalendar.getEventSources();
+  removeEvents.forEach(event => {
+  event.remove(); // this will clear 
   });
-
-  const newElements = displayedCalendarData.events.filter((event, i, arr) => {
-    return event.title.includes(document.getElementById('searchInput').value);
-  }).map((event, i, arr) => {
-    return {
-      id: event.id,
-      title: event.title,
-      start: event.event_start,
-      color: event.color,
-      description: event.description,
-      end: event.event_end,
-    };
-  });
-  console.log("newElements");
-  console.log(newElements);
-  setEventsElements(newElements);
+  eventsElements.filter((event, i, arr) => {
+  return event.title.includes(document.getElementById('searchInput').value);
+  }).forEach(eventElement => testFullCalendar.addEvent(eventElement));
 };
 
 const renderEventContent = (eventInfo) => {
@@ -324,25 +311,7 @@ const Calendar = () => {
                   
                   <div>
                     <input id='searchInput' placeholder='Enter event name'></input>
-                    <button onClick={() => {
-                      searchButtonHandle(displayedCalendarData, setDisplayedCalendarData, setEventsElements);
-                      handleEvents();
-                      let removeEvents = testFullCalendar.getEventSources();
-                      console.log('pizdanytisa 1');
-                      console.log(removeEvents);
-                      removeEvents.forEach(event => {
-                        event.remove(); // this will clear 
-                      });
-                      console.log('pizdanytisa 2');
-                      console.log(eventsElements);
-                      console.log('pizdanytisa 3');
-                      // testFullCalendar.addEvent(eventsElements[0]);
-                      console.log('pizdanytisa 4');
-                      eventsElements.filter((event, i, arr) => {
-                        return event.title.includes(document.getElementById('searchInput').value);
-                      }).forEach(eventElement => testFullCalendar.addEvent(eventElement));
-                      // testFullCalendar.addEventSource([...eventsElements, ...holidaysElements]);
-                    }}>Search</button>
+                    <button onClick={() => { searchButtonHandle(testFullCalendar, eventsElements); }}>Search</button>
                   </div>
                 </div>
               </div>
