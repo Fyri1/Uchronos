@@ -18,7 +18,7 @@ const handleDateSelect = async (
   setPopupActive
 ) => {
   let calendarApi = selectInfo.view.calendar;
-  // console.log(selectInfo);
+  console.log(selectInfo);
   calendarApi.unselect(); // clear date selection
   try {
     const initialEvents = {
@@ -68,6 +68,7 @@ const handleDateSelect = async (
     }
 
     setPopupActive(false);
+    calendarApi.rerenderEvents();
   } catch (e) {
     console.log('401! ' + e);
   }
@@ -85,11 +86,27 @@ const handleDateDelete = async (selectInfo, setPopupActive) => {
   }
 };
 
-const searchButtonHandle = async () => {
-  try {
-  } catch (e) {
-    console.log('401! ' + e);
-  }
+const searchButtonHandle = async (displayedCalendarData, setDisplayedCalendarData, setEventsElements) => {
+  setDisplayedCalendarData({
+    ...displayedCalendarData,
+    searchParam: document.getElementById('searchInput').value
+  });
+
+  const newElements = displayedCalendarData.events.filter((event, i, arr) => {
+    return event.title.includes(document.getElementById('searchInput').value);
+  }).map((event, i, arr) => {
+    return {
+      id: event.id,
+      title: event.title,
+      start: event.event_start,
+      color: event.color,
+      description: event.description,
+      end: event.event_end,
+    };
+  });
+  console.log("newElements");
+  console.log(newElements);
+  setEventsElements(newElements);
 };
 
 const renderEventContent = (eventInfo) => {
@@ -123,10 +140,13 @@ const Calendar = () => {
   const [displayedCalendarData, setDisplayedCalendarData] = useState({
     id: '',
     events: [],
+    searchParam: ''
   });
   const [holidays, setHolidays] = useState([]);
   const [popupActive, setPopupActive] = useState();
   const [newEventInfo, setNewEventInfo] = useState();
+  const [testFullCalendar, setTestFullCalendar] = useState();
+  const [eventsElements, setEventsElements] = useState();
 
   const [state, setState] = useState({
     weekendsVisible: true,
@@ -153,7 +173,18 @@ const Calendar = () => {
       setDisplayedCalendarData({
         ...calendars.data.data[0],
         events: events.data.data,
+        // searchParam: 'eba'
       });
+      setEventsElements(displayedCalendarData.events.map((event, i, arr) => {
+        return {
+          id: event.id,
+          title: event.title,
+          start: event.event_start,
+          color: event.color,
+          description: event.description,
+          end: event.event_end,
+        };
+      }));
 
       setLoading(false);
     } catch (err) {
@@ -176,12 +207,6 @@ const Calendar = () => {
     }
   };
 
-  const handleEvents = async (events) => {
-    setState({
-      currentEvents: events,
-    });
-  };
-
   // TEMP
   const calendarsElements = calendarsList.map((calendar, i, arr) => {
     // Find and mark the last element of loaded posts (for endless scroll)
@@ -195,11 +220,11 @@ const Calendar = () => {
             ?
             <div className='selected'> - selected</div>
             :
-            <div></div>
+            null
           }
         </div>
-        <div class="radio">
-          <label class="custom-radio">
+        <div className="radio">
+          <label className="custom-radio">
             <input type="radio" name="color" value="indigo"/>
             <span>Indigo</span>
           </label>
@@ -209,16 +234,9 @@ const Calendar = () => {
   });
 
   // TEMP
-  const eventsElements = displayedCalendarData.events.map((event, i, arr) => {
-    return {
-      id: event.id,
-      title: event.title,
-      start: event.event_start,
-      color: event.color,
-      description: event.description,
-      end: event.event_end,
-    };
-  });
+  
+  console.log(eventsElements);
+
   const holidaysElements = holidays.map((e) => ({
     id: e.id,
     title: e.summary,
@@ -227,6 +245,17 @@ const Calendar = () => {
     description: e.description,
     end: e.end.date,
   }));
+
+  const handleEvents = async (events) => {
+    console.log("ebat")
+    if (!testFullCalendar) {
+      setTestFullCalendar(events[0]._context.calendarApi);
+    }
+    setState({
+      currentEvents: events,
+    });
+  };
+
   return (
     <div className='kokon'>
       <div className="demo-app ">
@@ -294,8 +323,26 @@ const Calendar = () => {
                   <div>{calendarsElements}</div>
                   
                   <div>
-                    {/* <input placeholder='Enter event name'></input>  тимофей сказал что сделает поиск  */}
-                    {/* <button onClick={searchButtonHandle}></button> */}
+                    <input id='searchInput' placeholder='Enter event name'></input>
+                    <button onClick={() => {
+                      searchButtonHandle(displayedCalendarData, setDisplayedCalendarData, setEventsElements);
+                      handleEvents();
+                      let removeEvents = testFullCalendar.getEventSources();
+                      console.log('pizdanytisa 1');
+                      console.log(removeEvents);
+                      removeEvents.forEach(event => {
+                        event.remove(); // this will clear 
+                      });
+                      console.log('pizdanytisa 2');
+                      console.log(eventsElements);
+                      console.log('pizdanytisa 3');
+                      // testFullCalendar.addEvent(eventsElements[0]);
+                      console.log('pizdanytisa 4');
+                      eventsElements.filter((event, i, arr) => {
+                        return event.title.includes(document.getElementById('searchInput').value);
+                      }).forEach(eventElement => testFullCalendar.addEvent(eventElement));
+                      // testFullCalendar.addEventSource([...eventsElements, ...holidaysElements]);
+                    }}>Search</button>
                   </div>
                 </div>
               </div>
