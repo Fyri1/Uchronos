@@ -8,7 +8,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import ModalsContext from '../../contex/modalsContext.js';
-import EventModal from '../modals/EventModal.jsx';
 import Popup from './EventPopup.jsx';
 import '../css-files/Calendar.css';
 
@@ -18,8 +17,6 @@ const handleDateSelect = async (
   setPopupActive
 ) => {
   let calendarApi = selectInfo.view.calendar;
-
-  // console.log(selectInfo);
   calendarApi.unselect(); // clear date selection
   try {
     const initialEvents = {
@@ -91,7 +88,7 @@ const searchButtonHandle = async (testFullCalendar, eventsElements, holidaysElem
   console.log('pidoras handle');
   let removeEvents = testFullCalendar.getEventSources();
   removeEvents.forEach(event => {
-    event.remove(); // this will clear 
+    event.remove();
   });
   testFullCalendar.removeAllEvents();
   eventsElements.filter((event, i, arr) => {
@@ -108,21 +105,6 @@ const renderEventContent = (eventInfo) => {
       <b>{eventInfo.timeText}</b>
       <i>{eventInfo.event.title}</i>
     </>
-  );
-};
-
-const renderSidebarEvent = (event) => {
-  return (
-    <li key={event.id}>
-      <b>
-        {formatDate(event.start, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })}
-      </b>
-      <i>{event.title}</i>
-    </li>
   );
 };
 
@@ -218,21 +200,9 @@ const Calendar = () => {
 
   // TEMP
   const calendarsElements = calendarsList.map((calendar, i, arr) => {
-    // Find and mark the last element of loaded posts (for endless scroll)
-
-    // var line =calendar.title.split(":", 1);
-
-  //   <div className="sidebar">
-  //   <a className="active" href="#home">Home</a>
-  //   <a href="#news">News</a>
-  //   <a href="#contact">Contact</a>
-
-  // </div>
     return (
       <div>
         <div className="sidebar" id={calendar.title} onClick={handleCalendarChange}>
-    
-        
           {
            calendar.title === displayedCalendarData.title
             ?
@@ -240,14 +210,10 @@ const Calendar = () => {
             :
             <div className="" >{calendar.title}</div>
           }
-         
         </div>
       </div>
     );
   });
-
-  // TEMP
-  // console.log(eventsElements);
 
   const holidaysElements = holidays.map((e) => ({
     id: e.id,
@@ -258,9 +224,6 @@ const Calendar = () => {
     end: e.end.date,
   }));
   const initialEvents = eventsElements;
-  console.log("initialEvents");
-  console.log(initialEvents);
-
   const handleEvents = async (events) => {
     console.log("ebat handle events");
     if (!testFullCalendar) {
@@ -274,7 +237,6 @@ const Calendar = () => {
   return (
     <div className='kokon'>
       <div className="demo-app ">
-        {/* {renderSidebar()} */}
         {
           !loading && initialEvents && initialEvents.length
           ?
@@ -301,7 +263,6 @@ const Calendar = () => {
                   {/* this will make checkbox wiyh color  */}
                   <input className='text-field__input' id='colorInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.backgroundColor : ''}></input>
                   <label className='text-field__label' htmlFor='color'>Color</label>
-                
                 </div>
 
               <div>
@@ -330,30 +291,20 @@ const Calendar = () => {
             </Popup>
             
             <div className='img'><img src="../public/photo/logo.jpg"></img></div>
-            <p>Это  LOGo</p>
             <div className='main_context'>
               
               <div className='sidebar' id ="mainId">
-                
                   <div className='border1'>
                     <div >{calendarsElements}</div>
                     <div class="d1">
-      
-                      {/* тимофей сказал поиск делать  */}
-                      <input type="text" placeholder='Enter event name'></input>
                       <div className='koko2'></div>
                       <input id='searchInput' placeholder='Enter event name'></input>
-                      <button onClick={() => { searchButtonHandle(testFullCalendar, eventsElements, holidaysElements) }}>Search</button>
-                      
-                      {/* НЕ РАБОТАЕТ КНОПКАААА!!!!!!!! ЕЕ НЕТ! */}
-                      
+                      <button onClick={() => { searchButtonHandle(testFullCalendar, eventsElements, holidaysElements) }}></button>
                     </div>
                   </div>
               </div>
 
               <div className="demo-app-main" >
-                
-                {/* <EventModal /> */}
                 <div className="day_calendar" id='calendar'>
                  <FullCalendar
                     plugins={[
@@ -392,7 +343,7 @@ const Calendar = () => {
             </div>
           </div>
           :
-          <div></div>
+          null
         }
       </div>
     </div>
