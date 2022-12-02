@@ -7,8 +7,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
-import ModalsContext from '../../contex/modalsContext.js';
 import Popup from './EventPopup.jsx';
+import CreateEvent from '../extentions/CreateEvent.jsx';
+
 import '../css-files/Calendar.css';
 
 const handleDateSelect = async (
@@ -165,8 +166,6 @@ const Calendar = () => {
     }
   }
 
-  const { setAnchorEl } = useContext(ModalsContext);
-
   const handleEvent = async (event) => {
     console.log('ya pidoras');
     console.log(event);
@@ -235,59 +234,19 @@ const Calendar = () => {
   };
 
   return (
-    <div className='kokon'>
+    <div className="kokon">
       <div className="demo-app ">
         {
           !loading && initialEvents && initialEvents.length
           ?
           <div>
             <Popup active={popupActive} setActive={setPopupActive}>
-              <div className = 'Greetings'><p>Hi GERMAN PIDOR!</p></div>
-              
-                <div className="text-field text-field_floating-2">
-                  <input className='text-field__input' type="text" id='titleInput' value={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : ''}></input>
-                  <label className='text-field__label'id = "title2"   htmlFor='title'>Title</label>
-                </div>
-
-                <div className="text-field text-field_floating-2">
-                  <input className='text-field__input' id='descriptionInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 && eventsElements.find(item => item.id === newEventInfo.event.id) ? eventsElements.find(item => item.id === newEventInfo.event.id).description : ''}></input>
-                  <label className='text-field__label'id = "title" htmlFor='description'>Description</label>
-                </div>
-
-                <div className="text-field text-field_floating-2">
-                  <input className='text-field__input' id='event_endInput'></input>
-                  <label className='text-field__label'id = "title" htmlFor='event_end'>Duration</label>
-                </div>
-
-                <div className="text-field text-field_floating-2">
-                  {/* this will make checkbox wiyh color  */}
-                  <input className='text-field__input' id='colorInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.backgroundColor : ''}></input>
-                  <label className='text-field__label' htmlFor='color'>Color</label>
-                </div>
-
-              <div>
-                <button className='button_create' onClick={() => handleDateSelect(newEventInfo, displayedCalendarData, setPopupActive)}>
-                  {
-                    newEventInfo?.event?.id
-                    ?
-                    <div className="button_hola" id ="button_hola_create" >
-                      <label>Update</label>
-                    </div>
-                    :
-                    <div className="button_hola"  id ="button_hola_create">
-                      <label>Create</label>
-                    </div>
-                  }
-                </button>
-                <button className="button_hola" id ="button_hola_cancel" onClick={() => {setPopupActive(false); console.log(Object.keys(newEventInfo).length)}}>Cancel</button>
-                {
-                  newEventInfo && Object.keys(newEventInfo).length === 4
-                  ?
-                  <button className="button_hola" id ="button_hola_delete" onClick={() => handleDateDelete(newEventInfo, setPopupActive)}>Delete</button>
-                  :
-                  null
-                }
-              </div>
+              <CreateEvent
+                newEventInfo={newEventInfo}
+                eventsElements={eventsElements}
+                setPopupActive={setPopupActive}
+                active={popupActive}
+              />
             </Popup>
             
             <div className='img'><img src="../public/photo/logo.jpg"></img></div>

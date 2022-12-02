@@ -8,7 +8,6 @@ import Login from './auth-components/Login.jsx';
 import Register from './auth-components/Register.jsx';
 import LanguageContext from '../contex/languageContext.js';
 import SocketContext from '../contex/socketContext.js';
-import ModalsContext from '../contex/modalsContext.js';
 import ComfirmEmail from './auth-components/ComfirmEmail.jsx';
 import Header from './main-page/Header.jsx';
 import Spinner from './extentions/Spinner.jsx';
@@ -27,7 +26,6 @@ const App = () => {
   const [isGuest, setGuest] = useState(false);
   const [isLoad, setLoad] = useState(true);
   const { t, i18n } = useTranslation();
-  const [anchorEl, setAnchorEl] = useState(null);
   useEffect(() => {
     socket.on('connection', () => console.log(socket.id));
     !localStorage.getItem('jwt') ? setGuest(true) : setGuest(false);
@@ -52,7 +50,6 @@ const App = () => {
   return isLoad ? (
     <Spinner />
   ) : (
-    <ModalsContext.Provider value={{ anchorEl, setAnchorEl }}>
       <LanguageContext.Provider value={{ t }}>
         <SocketContext.Provider value={{ socket }}>
           <BrowserRouter>
@@ -72,7 +69,6 @@ const App = () => {
           </BrowserRouter>
         </SocketContext.Provider>
       </LanguageContext.Provider>
-    </ModalsContext.Provider>
   );
 };
 
