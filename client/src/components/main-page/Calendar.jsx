@@ -18,7 +18,8 @@ const handleDateSelect = async (
   setPopupActive
 ) => {
   let calendarApi = selectInfo.view.calendar;
-  console.log(selectInfo);
+
+  // console.log(selectInfo);
   calendarApi.unselect(); // clear date selection
   try {
     const initialEvents = {
@@ -190,34 +191,56 @@ const Calendar = () => {
     try {
       await $api.patch('/calendar/event/' + event.event.id, {
         event_start: event.event.startStr,
-        event_end: event.event.endStr,
+        event_end: event.event.endStr
       });
     } catch (e) {
       console.log('401! ' + e);
     }
   };
 
+  const handleCalendarChange = async (event) => {
+    try {
+      console.log("ishy pizdec");
+      console.log(displayedCalendarData);
+      const selectedCalendar = calendarsList.find(calendar => calendar.title === event.currentTarget.id);
+      console.log(selectedCalendar.id);
+      const events = await $api.get('/calendar/event/' + selectedCalendar.id);
+      console.log("pizos");
+
+      setDisplayedCalendarData({
+        ...selectedCalendar,
+        events: events.data.data
+      });
+    } catch (e) {
+      console.log('401! ' + e);
+    }
+  }
+
   // TEMP
   const calendarsElements = calendarsList.map((calendar, i, arr) => {
     // Find and mark the last element of loaded posts (for endless scroll)
+
+    // var line =calendar.title.split(":", 1);
+
+  //   <div className="sidebar">
+  //   <a className="active" href="#home">Home</a>
+  //   <a href="#news">News</a>
+  //   <a href="#contact">Contact</a>
+
+  // </div>
     return (
       <div>
-        <div className="calendarName">
-
-          <div>{calendar.title}</div>
+        <div className="sidebar" id={calendar.title} onClick={handleCalendarChange}>
+    
+        
           {
-            calendar.title === displayedCalendarData.title
+           calendar.title === displayedCalendarData.title
             ?
-            <div className='selected'> - selected</div>
+            <div className="all_list">{calendar.title}</div>
             :
-            null
+            <div className="" >{calendar.title}</div>
           }
-        </div>
-        <div className="radio">
-          <label className="custom-radio">
-            <input type="radio" name="color" value="indigo"/>
-            <span>Indigo</span>
-          </label>
+         
         </div>
       </div>
     );
@@ -305,23 +328,34 @@ const Calendar = () => {
                 }
               </div>
             </Popup>
-
+            
+            <div className='img'><img src="../public/photo/logo.jpg"></img></div>
+            <p>Это  LOGo</p>
             <div className='main_context'>
+              
               <div className='sidebar' id ="mainId">
-                <div>
-                  <div>{calendarsElements}</div>
-                  <div>
-                    <input id='searchInput' placeholder='Enter event name'></input>
-                    <button onClick={() => { searchButtonHandle(testFullCalendar, eventsElements, holidaysElements) }}>Search</button>
+                
+                  <div className='border1'>
+                    <div >{calendarsElements}</div>
+                    <div class="d1">
+      
+                      {/* тимофей сказал поиск делать  */}
+                      <input type="text" placeholder='Enter event name'></input>
+                      <div className='koko2'></div>
+                      <input id='searchInput' placeholder='Enter event name'></input>
+                      <button onClick={() => { searchButtonHandle(testFullCalendar, eventsElements, holidaysElements) }}>Search</button>
+                      
+                      {/* НЕ РАБОТАЕТ КНОПКАААА!!!!!!!! ЕЕ НЕТ! */}
+                      
+                    </div>
                   </div>
-                </div>
               </div>
 
               <div className="demo-app-main" >
                 
-                <EventModal />
-                <div className="day_calendar" >
-                  <FullCalendar
+                {/* <EventModal /> */}
+                <div className="day_calendar" id='calendar'>
+                 <FullCalendar
                     plugins={[
                       dayGridPlugin,
                       timeGridPlugin,
