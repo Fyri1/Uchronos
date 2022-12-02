@@ -18,7 +18,7 @@ const handleDateSelect = async (
   setPopupActive
 ) => {
   let calendarApi = selectInfo.view.calendar;
-  // console.log(selectInfo);
+  console.log(selectInfo);
   calendarApi.unselect(); // clear date selection
   try {
     const initialEvents = {
@@ -68,6 +68,7 @@ const handleDateSelect = async (
     }
 
     setPopupActive(false);
+    calendarApi.rerenderEvents();
   } catch (e) {
     console.log('401! ' + e);
   }
@@ -85,15 +86,22 @@ const handleDateDelete = async (selectInfo, setPopupActive) => {
   }
 };
 
-const searchButtonHandle = async () => {
-  try {
-  } catch (e) {
-    console.log('401! ' + e);
-  }
+const searchButtonHandle = async (testFullCalendar, eventsElements, holidaysElements) => {
+  console.log('pidoras handle');
+  let removeEvents = testFullCalendar.getEventSources();
+  removeEvents.forEach(event => {
+    event.remove(); // this will clear 
+  });
+  testFullCalendar.removeAllEvents();
+  eventsElements.filter((event, i, arr) => {
+    return event.title.includes(document.getElementById('searchInput').value);
+  }).forEach(eventElement => testFullCalendar.addEvent(eventElement));
+  holidaysElements.filter((event, i, arr) => {
+    return event.title.includes(document.getElementById('searchInput').value);
+  }).forEach(holidayElement => testFullCalendar.addEvent(holidayElement));
 };
 
 const renderEventContent = (eventInfo) => {
-  // console.log(eventInfo);
   return (
     <>
       <b>{eventInfo.timeText}</b>
@@ -123,10 +131,13 @@ const Calendar = () => {
   const [displayedCalendarData, setDisplayedCalendarData] = useState({
     id: '',
     events: [],
+    searchParam: ''
   });
   const [holidays, setHolidays] = useState([]);
   const [popupActive, setPopupActive] = useState();
   const [newEventInfo, setNewEventInfo] = useState();
+  const [testFullCalendar, setTestFullCalendar] = useState();
+  const [eventsElements, setEventsElements] = useState();
 
   const [state, setState] = useState({
     weekendsVisible: true,
@@ -136,6 +147,7 @@ const Calendar = () => {
   React.useEffect(() => {
     console.log('Getting user calendars');
     OnLoad();
+
   }, [loading]);
 
   async function OnLoad() {
@@ -146,14 +158,23 @@ const Calendar = () => {
         'https://www.googleapis.com/calendar/v3/calendars/en.ukrainian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyAQvFrMKbaO9Jptp9aMvjLaHeGIIkFgY2k'
       );
       setHolidays(holidays.data.items);
-      // console.log(holidays.data.items);
       const events = await $api.get(
         '/calendar/event/' + calendars.data.data[0].id
       );
       setDisplayedCalendarData({
         ...calendars.data.data[0],
-        events: events.data.data,
+        events: events.data.data
       });
+      setEventsElements(displayedCalendarData.events.map((event, i, arr) => {
+        return {
+          id: event.id,
+          title: event.title,
+          start: event.event_start,
+          color: event.color,
+          description: event.description,
+          end: event.event_end,
+        };
+      }));
 
       setLoading(false);
     } catch (err) {
@@ -176,12 +197,6 @@ const Calendar = () => {
     }
   };
 
-  const handleEvents = async (events) => {
-    setState({
-      currentEvents: events,
-    });
-  };
-
   // TEMP
   const calendarsElements = calendarsList.map((calendar, i, arr) => {
     // Find and mark the last element of loaded posts (for endless scroll)
@@ -195,11 +210,11 @@ const Calendar = () => {
             ?
             <div className='selected'> - selected</div>
             :
-            <div></div>
+            null
           }
         </div>
-        <div class="radio">
-          <label class="custom-radio">
+        <div className="radio">
+          <label className="custom-radio">
             <input type="radio" name="color" value="indigo"/>
             <span>Indigo</span>
           </label>
@@ -209,16 +224,8 @@ const Calendar = () => {
   });
 
   // TEMP
-  const eventsElements = displayedCalendarData.events.map((event, i, arr) => {
-    return {
-      id: event.id,
-      title: event.title,
-      start: event.event_start,
-      color: event.color,
-      description: event.description,
-      end: event.event_end,
-    };
-  });
+  // console.log(eventsElements);
+
   const holidaysElements = holidays.map((e) => ({
     id: e.id,
     title: e.summary,
@@ -227,31 +234,42 @@ const Calendar = () => {
     description: e.description,
     end: e.end.date,
   }));
+  const initialEvents = eventsElements;
+  console.log("initialEvents");
+  console.log(initialEvents);
+
+  const handleEvents = async (events) => {
+    console.log("ebat handle events");
+    if (!testFullCalendar) {
+      setTestFullCalendar(events[0]._context.calendarApi);
+    }
+    setState({
+      currentEvents: events,
+    });
+  };
+
   return (
     <div className='kokon'>
       <div className="demo-app ">
         {/* {renderSidebar()} */}
         {
-          !loading
+          !loading && initialEvents && initialEvents.length
           ?
           <div>
             <Popup active={popupActive} setActive={setPopupActive}>
               <div className = 'Greetings'><p>Hi GERMAN PIDOR!</p></div>
               
                 <div className="text-field text-field_floating-2">
-                  
                   <input className='text-field__input' type="text" id='titleInput' value={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : ''}></input>
                   <label className='text-field__label'id = "title2"   htmlFor='title'>Title</label>
                 </div>
 
                 <div className="text-field text-field_floating-2">
-                  
                   <input className='text-field__input' id='descriptionInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 && eventsElements.find(item => item.id === newEventInfo.event.id) ? eventsElements.find(item => item.id === newEventInfo.event.id).description : ''}></input>
                   <label className='text-field__label'id = "title" htmlFor='description'>Description</label>
                 </div>
 
                 <div className="text-field text-field_floating-2">
-                  
                   <input className='text-field__input' id='event_endInput'></input>
                   <label className='text-field__label'id = "title" htmlFor='event_end'>Duration</label>
                 </div>
@@ -292,10 +310,9 @@ const Calendar = () => {
               <div className='sidebar' id ="mainId">
                 <div>
                   <div>{calendarsElements}</div>
-                  
                   <div>
-                    {/* <input placeholder='Enter event name'></input>  тимофей сказал что сделает поиск  */}
-                    {/* <button onClick={searchButtonHandle}></button> */}
+                    <input id='searchInput' placeholder='Enter event name'></input>
+                    <button onClick={() => { searchButtonHandle(testFullCalendar, eventsElements, holidaysElements) }}>Search</button>
                   </div>
                 </div>
               </div>
@@ -322,7 +339,7 @@ const Calendar = () => {
                     selectMirror={true}
                     dayMaxEvents={true}
                     weekends={true}
-                    initialEvents={[...eventsElements, ...holidaysElements]}
+                    initialEvents={[...initialEvents, ...holidaysElements]}
                     select={(selectInfo) => {
                       setNewEventInfo(selectInfo);
                       setPopupActive(true);
