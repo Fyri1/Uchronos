@@ -86,18 +86,22 @@ const handleDateDelete = async (selectInfo, setPopupActive) => {
   }
 };
 
-const searchButtonHandle = async (testFullCalendar, eventsElements) => {
+const searchButtonHandle = async (testFullCalendar, eventsElements, holidaysElements) => {
+  console.log('pidoras handle');
   let removeEvents = testFullCalendar.getEventSources();
   removeEvents.forEach(event => {
-  event.remove(); // this will clear 
+    event.remove(); // this will clear 
   });
+  testFullCalendar.removeAllEvents();
   eventsElements.filter((event, i, arr) => {
-  return event.title.includes(document.getElementById('searchInput').value);
+    return event.title.includes(document.getElementById('searchInput').value);
   }).forEach(eventElement => testFullCalendar.addEvent(eventElement));
+  holidaysElements.filter((event, i, arr) => {
+    return event.title.includes(document.getElementById('searchInput').value);
+  }).forEach(holidayElement => testFullCalendar.addEvent(holidayElement));
 };
 
 const renderEventContent = (eventInfo) => {
-  // console.log(eventInfo);
   return (
     <>
       <b>{eventInfo.timeText}</b>
@@ -143,6 +147,7 @@ const Calendar = () => {
   React.useEffect(() => {
     console.log('Getting user calendars');
     OnLoad();
+
   }, [loading]);
 
   async function OnLoad() {
@@ -153,14 +158,12 @@ const Calendar = () => {
         'https://www.googleapis.com/calendar/v3/calendars/en.ukrainian%23holiday%40group.v.calendar.google.com/events?key=AIzaSyAQvFrMKbaO9Jptp9aMvjLaHeGIIkFgY2k'
       );
       setHolidays(holidays.data.items);
-      // console.log(holidays.data.items);
       const events = await $api.get(
         '/calendar/event/' + calendars.data.data[0].id
       );
       setDisplayedCalendarData({
         ...calendars.data.data[0],
-        events: events.data.data,
-        // searchParam: 'eba'
+        events: events.data.data
       });
       setEventsElements(displayedCalendarData.events.map((event, i, arr) => {
         return {
@@ -221,8 +224,7 @@ const Calendar = () => {
   });
 
   // TEMP
-  
-  console.log(eventsElements);
+  // console.log(eventsElements);
 
   const holidaysElements = holidays.map((e) => ({
     id: e.id,
@@ -232,9 +234,12 @@ const Calendar = () => {
     description: e.description,
     end: e.end.date,
   }));
+  const initialEvents = eventsElements;
+  console.log("initialEvents");
+  console.log(initialEvents);
 
   const handleEvents = async (events) => {
-    console.log("ebat")
+    console.log("ebat handle events");
     if (!testFullCalendar) {
       setTestFullCalendar(events[0]._context.calendarApi);
     }
@@ -248,26 +253,23 @@ const Calendar = () => {
       <div className="demo-app ">
         {/* {renderSidebar()} */}
         {
-          !loading
+          !loading && initialEvents && initialEvents.length
           ?
           <div>
             <Popup active={popupActive} setActive={setPopupActive}>
               <div className = 'Greetings'><p>Hi GERMAN PIDOR!</p></div>
               
                 <div className="text-field text-field_floating-2">
-                  
                   <input className='text-field__input' type="text" id='titleInput' value={newEventInfo && Object.keys(newEventInfo).length === 4 ? newEventInfo.event.title : ''}></input>
                   <label className='text-field__label'id = "title2"   htmlFor='title'>Title</label>
                 </div>
 
                 <div className="text-field text-field_floating-2">
-                  
                   <input className='text-field__input' id='descriptionInput' placeholder={newEventInfo && Object.keys(newEventInfo).length === 4 && eventsElements.find(item => item.id === newEventInfo.event.id) ? eventsElements.find(item => item.id === newEventInfo.event.id).description : ''}></input>
                   <label className='text-field__label'id = "title" htmlFor='description'>Description</label>
                 </div>
 
                 <div className="text-field text-field_floating-2">
-                  
                   <input className='text-field__input' id='event_endInput'></input>
                   <label className='text-field__label'id = "title" htmlFor='event_end'>Duration</label>
                 </div>
@@ -308,10 +310,9 @@ const Calendar = () => {
               <div className='sidebar' id ="mainId">
                 <div>
                   <div>{calendarsElements}</div>
-                  
                   <div>
                     <input id='searchInput' placeholder='Enter event name'></input>
-                    <button onClick={() => { searchButtonHandle(testFullCalendar, eventsElements); }}>Search</button>
+                    <button onClick={() => { searchButtonHandle(testFullCalendar, eventsElements, holidaysElements) }}>Search</button>
                   </div>
                 </div>
               </div>
@@ -338,7 +339,7 @@ const Calendar = () => {
                     selectMirror={true}
                     dayMaxEvents={true}
                     weekends={true}
-                    initialEvents={[...eventsElements, ...holidaysElements]}
+                    initialEvents={[...initialEvents, ...holidaysElements]}
                     select={(selectInfo) => {
                       setNewEventInfo(selectInfo);
                       setPopupActive(true);
