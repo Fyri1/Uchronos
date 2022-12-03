@@ -64,23 +64,23 @@ function MainButtons() {
       {!localStorage.getItem('token') ? (
         // если тру
         <div>
-          <div class="container-left-button">
-            <div class="center">
+          <div className="container-left-button">
+            <div className="center">
               <div className="rightButton">
-                <button onClick={LoginUser} type="submit" class="btn">
+                <button onClick={LoginUser} type="submit" className="btn">
                   <svg
                     width="180px"
                     height="60px"
                     viewBox="0 0 180 60"
-                    class="border"
+                    className="border"
                   >
                     <polyline
                       points="179,1 179,59 1,59 1,1 179,1"
-                      class="bg-line"
+                      className="bg-line"
                     />
                     <polyline
                       points="179,1 179,59 1,59 1,1 179,1"
-                      class="hl-line"
+                      className="hl-line"
                     />
                   </svg>
                   <p>Login</p>
@@ -88,23 +88,23 @@ function MainButtons() {
               </div>
             </div>
           </div>
-          <div class="container-right-button">
-            <div class="center">
+          <div className="container-right-button">
+            <div className="center">
               <div className="rightButton">
-                <button onClick={Register} type="submit" class="btn">
+                <button onClick={Register} type="submit" className="btn">
                   <svg
                     width="180px"
                     height="60px"
                     viewBox="0 0 180 60"
-                    class="border"
+                    className="border"
                   >
                     <polyline
                       points="179,1 179,59 1,59 1,1 179,1"
-                      class="bg-line"
+                      className="bg-line"
                     />
                     <polyline
                       points="179,1 179,59 1,59 1,1 179,1"
-                      class="hl-line"
+                      className="hl-line"
                     />
                   </svg>
                   <p>Register</p>

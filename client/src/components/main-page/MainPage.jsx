@@ -11,15 +11,15 @@ const MainPage = () => {
     <div className="MainPage">
       <MainButtons />
       <div className="MainPage_сlock">
-        <div class="clock">
-          <div class="hour">
-            <div class="hr" id="hr"></div>
+        <div className="clock">
+          <div className="hour">
+            <div className="hr" id="hr"></div>
           </div>
-          <div class="min">
-            <div class="mn" id="mn"></div>
+          <div className="min">
+            <div className="mn" id="mn"></div>
           </div>
-          <div class="sec">
-            <div class="sc" id="sc"></div>
+          <div className="sec">
+            <div className="sc" id="sc"></div>
           </div>
         </div>
       </div>

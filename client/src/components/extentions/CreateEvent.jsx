@@ -11,12 +11,9 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import DataPicker from './DataPicker.jsx';
-import * as yup from 'yup';
+import { handleDateSelect, handleDateDelete } from '../main-page/Calendar.jsx';
 
-const schemeEvent = yup.object({
-  title: yup.string().required().trim(),
-  description: yup.string().required().trim(),
-});
+const setError = (errors, key, value) => (errors[key].required = value);
 
 const CreateEvent = ({
   newEventInfo,
@@ -26,6 +23,7 @@ const CreateEvent = ({
 }) => {
   const [state, setState] = useState({
     values: {
+      id: '',
       title: '',
       description: '',
       color: 'blue',
@@ -52,24 +50,25 @@ const CreateEvent = ({
         eventsElements.find((item) => item.id === newEventInfo.event.id)
       ? eventsElements.find((item) => item.id === newEventInfo.event.id)
       : '';
-    console.log(values);
     setState((prev) => ({
       ...prev,
       values: {
+        id: values.id || '',
         title: values.title || '',
-        description: values.description,
+        description: values.description || '',
         color: values.color || 'blue',
         range: {
-          start: values.start,
-          end: values.end,
+          start: values.start || null,
+          end: values.end || null,
         },
       },
     }));
-    console.log(state);
   }, [active]);
 
-  const handleSubmit = () => {};
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleDateSelect(newEventInfo, state.values);
+  };
   return (
     <form onSubmit={handleSubmit}>
       <div className="Greetings">
@@ -82,6 +81,9 @@ const CreateEvent = ({
           label="Titile"
           name="title"
           className="rounded-lg w-full"
+          onBlur={(e) => {
+            state.errors.title.required = true;
+          }}
           onChange={(e) => {
             setState((prev) => ({
               values: { ...prev.values, title: e.target.value },
@@ -152,16 +154,7 @@ const CreateEvent = ({
       </div>
 
       <div>
-        <button
-          className="button_create"
-          onClick={() =>
-            handleDateSelect(
-              newEventInfo,
-              displayedCalendarData,
-              setPopupActive
-            )
-          }
-        >
+        <button className="button_create">
           {newEventInfo?.event?.id ? (
             <div className="button_hola" id="button_hola_create">
               <label>Update</label>
@@ -172,7 +165,7 @@ const CreateEvent = ({
             </div>
           )}
         </button>
-        <a
+        <label
           className="button_hola"
           id="button_hola_cancel"
           onClick={() => {
@@ -182,7 +175,10 @@ const CreateEvent = ({
                 title: '',
                 description: '',
                 color: '',
-                range: '',
+                range: {
+                  start: '',
+                  end: '',
+                },
               },
               errors: {
                 title: {
@@ -198,15 +194,15 @@ const CreateEvent = ({
           }}
         >
           Cancel
-        </a>
+        </label>
         {newEventInfo && Object.keys(newEventInfo).length === 4 ? (
-          <button
+          <label
             className="button_hola"
             id="button_hola_delete"
             onClick={() => handleDateDelete(newEventInfo, setPopupActive)}
           >
             Delete
-          </button>
+          </label>
         ) : null}
       </div>
     </form>
