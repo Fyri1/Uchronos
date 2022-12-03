@@ -99,9 +99,11 @@ class CalendarEvent {
       if (color) {
         itemsToUpdate = { ...itemsToUpdate, color };
       }
+      // console.log(event_start);
       if (event_start) {
         itemsToUpdate = { ...itemsToUpdate, event_start };
       }
+      // console.log(event_end);
       if (event_end) {
         itemsToUpdate = { ...itemsToUpdate, event_end };
       }

@@ -14,13 +14,6 @@ export default ({ setTime, time }) => {
           label="Start day"
           value={time.start}
           onChange={(newValue) => {
-            // console.log(
-            //   `${dateStart.getFullYear()}-${dateStart.getMonth()}-${
-            //     dateStart.getDate() < 10
-            //       ? `0${dateStart.getDate()}`
-            //       : dateStart.getDate()
-            //   }`
-            // );
             setTime((prev) => ({
               values: {
                 ...prev.values,

@@ -21,6 +21,7 @@ const CreateEvent = ({
   setPopupActive,
   active,
 }) => {
+  // const [stateEvent, setEvent] = use
   const [state, setState] = useState({
     values: {
       id: '',
@@ -50,6 +51,7 @@ const CreateEvent = ({
         eventsElements.find((item) => item.id === newEventInfo.event.id)
       ? eventsElements.find((item) => item.id === newEventInfo.event.id)
       : '';
+    console.log(values);
     setState((prev) => ({
       ...prev,
       values: {
@@ -67,7 +69,7 @@ const CreateEvent = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    handleDateSelect(newEventInfo, state.values);
+    handleDateSelect(newEventInfo, state.values, setPopupActive);
   };
   return (
     <form onSubmit={handleSubmit}>

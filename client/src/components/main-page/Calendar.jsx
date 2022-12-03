@@ -15,6 +15,24 @@ import '../css-files/Calendar.css';
 export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
   let calendarApi = selectInfo.view.calendar;
   calendarApi.unselect(); // clear date selection
+  let start = '';
+  let end = '';
+      if (typeof values.range.start !== 'string') {
+        start = `${values.range.start.$d.getFullYear()}-${values.range.start.$d.getMonth() + 1}-${values.range.start.$d.getDate() < 10
+            ? `0${values.range.start.$d.getDate()}`
+            : values.range.start.$d.getDate()
+          }`;
+      } else {
+        start = values.range.start;
+      }
+      if (typeof values.range.end !== 'string') {
+        end = `${values.range.end.$d.getFullYear()}-${values.range.end.$d.getMonth() + 1}-${values.range.end.$d.getDate() < 10
+            ? `0${values.range.end.$d.getDate()}`
+            : values.range.end.$d.getDate()
+          }`;
+      } else {
+        end = values.range.end;
+      }
   try {
     const initialEvents = {
       //// NADO DETO NARIT EBANII ID USERA
@@ -22,35 +40,41 @@ export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
       title: values.title,
       description: values.description,
       color: values.color,
-      start: values.range.start,
-      end: values.range.end,
+      start,
+      end,
     };
     console.log(initialEvents);
 
     // Check if such event was already created
     if (selectInfo.event?.id) {
-      await $api.patch('/calendar/event/' + selectInfo.event.id, initialEvents);
       //// TEMP HYINYA
       //// YA XZ KAK ESHE SDELAT SHOB PO KRASOTE POETOMY DELAEM PO PACANSKI
-      if (document.getElementById('titleInput').value) {
-        selectInfo.title = document.getElementById('titleInput').value;
-      } else {
-        selectInfo.title = selectInfo.event.title;
-      }
+      // if (values.title) {
+      //   selectInfo.title = document.getElementById('titleInput').value;
+      // } else {
+      //   selectInfo.title = selectInfo.event.title;
+      // }
 
-      if (document.getElementById('descriptionInput').value) {
-        selectInfo.description =
-          document.getElementById('descriptionInput').value;
-      }
+      // if (document.getElementById('descriptionInput').value) {
+      //   selectInfo.description =
+      //     document.getElementById('descriptionInput').value;
+      // }
 
-      if (document.getElementById('colorInput').value) {
-        selectInfo.color = document.getElementById('colorInput').value;
-      } else {
-        selectInfo.color = selectInfo.event.backgroundColor;
-      }
+      // if (document.getElementById('colorInput').value) {
+      //   selectInfo.color = document.getElementById('colorInput').value;
+      // } else {
+      //   selectInfo.color = selectInfo.event.backgroundColor;
+      // }
+      selectInfo.id = values.id;
+      selectInfo.title = values.title;
+      selectInfo.description = values.description;
+      selectInfo.color = values.color;
+      selectInfo.start = start;
+      selectInfo.end = end;
 
-      selectInfo.start = selectInfo.event.startStr;
-      selectInfo.end = selectInfo.event.endStr;
+      // selectInfo.start = selectInfo.event.startStr;
+      // selectInfo.end = selectInfo.event.endStr;
+      await $api.patch('/calendar/event/' + selectInfo.event.id, initialEvents);
       calendarApi.getEventById(selectInfo.event.id).remove();
       calendarApi.addEvent(selectInfo);
     } else {
@@ -59,7 +83,7 @@ export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
     }
 
     setPopupActive(false);
-    calendarApi.rerenderEvents();
+    // calendarApi.rerenderEvents();
   } catch (e) {
     console.log('401! ' + e);
   }
@@ -172,8 +196,8 @@ const Calendar = () => {
     console.log(event);
     try {
       await $api.patch('/calendar/event/' + event.event.id, {
-        event_start: event.event.startStr,
-        event_end: event.event.endStr,
+        start: event.event.startStr,
+        end: event.event.endStr,
       });
     } catch (e) {
       console.log('401! ' + e);
