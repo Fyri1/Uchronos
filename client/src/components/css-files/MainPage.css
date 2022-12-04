@@ -12,12 +12,11 @@ body{
     min-height: 100vh;
     background: #091921;
     background-repeat: no-repeat;
-    
-
 }
+
 .clock{
-    width: 350px;
-    height: 350px;
+    width: 200px;
+    height: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -90,7 +89,7 @@ body{
     content: '';
     position: absolute;
     width: 2px;
-    height: 150px;
+    height: 100px;
     background-color: #fff;
     z-index: 12;
     border-radius: 6px 6px 0 0;

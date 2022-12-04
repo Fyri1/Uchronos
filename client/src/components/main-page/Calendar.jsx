@@ -9,10 +9,11 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import Popup from './EventPopup.jsx';
 import CreateEvent from '../extentions/CreateEvent.jsx';
-
+import CreateCalendar from '../extentions/CreateCalendar.jsx';
+import { Clock } from './MainPage.jsx';
 import '../css-files/Calendar.css';
 
-export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
+export const handleDateSelect = async (selectInfo, values, setEventPopupActive) => {
   let calendarApi = selectInfo.view.calendar;
   calendarApi.unselect();
   let start = '';
@@ -60,23 +61,33 @@ export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
       calendarApi.addEvent(initialEvents);
     }
 
-    setPopupActive(false);
+    setEventPopupActive(false);
   } catch (e) {
     console.log('401! ' + e);
   }
 };
 
-export const handleDateDelete = async (selectInfo, setPopupActive) => {
+export const handleDateDelete = async (selectInfo, setEventPopupActive) => {
   try {
     await $api.delete('/calendar/event/' + selectInfo.event.id);
 
-    setPopupActive(false);
+    setEventPopupActive(false);
     let calendarApi = selectInfo.view.calendar;
     calendarApi.getEventById(selectInfo.event.id).remove();
   } catch (e) {
     console.log('401! ' + e);
   }
 };
+
+export const handleCalendarAdd = async (values) => {
+  try {
+    console.log('dobavit pizdec');
+    console.log(values);
+    // await $api.post('/calendar/' + selectInfo.event.id);
+  } catch (e) {
+    console.log('401! ' + e);
+  }
+}
 
 const searchButtonHandle = async (
   testFullCalendar,
@@ -119,7 +130,8 @@ const Calendar = () => {
     searchParam: '',
   });
   const [holidays, setHolidays] = useState([]);
-  const [popupActive, setPopupActive] = useState();
+  const [eventPopupActive, setEventPopupActive] = useState();
+  const [calendarCreatePopupActive, setCalendarCreatePopupActive] = useState();
   const [newEventInfo, setNewEventInfo] = useState();
   const [testFullCalendar, setTestFullCalendar] = useState();
   const [eventsElements, setEventsElements] = useState();
@@ -195,14 +207,6 @@ const Calendar = () => {
     }
   };
 
-  const handleCalendarAdd = async () => {
-    try {
-      console.log('dobavit pizdec');
-    } catch (e) {
-      console.log('401! ' + e);
-    }
-  }
-
   const handleCalendarChange = async (event) => {
     try {
       console.log('ishy pizdec');
@@ -235,9 +239,8 @@ const Calendar = () => {
         })
         :
         []
-        setEventsElements(
-          parsedElements
-        );
+
+      setEventsElements(parsedElements);
       
       //// OSTAVIT IBO MOZET NE RABOTAT
       // if (events.data.data.length) {
@@ -290,54 +293,53 @@ const Calendar = () => {
       <div className="demo-app ">
         {!loading && initialEvents && initialEvents.length ? (
           <div>
-            <Popup active={popupActive} setActive={setPopupActive}>
+            {/* Event Popup */}
+            <Popup active={eventPopupActive} setActive={setEventPopupActive}>
               <CreateEvent
                 newEventInfo={newEventInfo}
                 eventsElements={eventsElements}
-                setPopupActive={setPopupActive}
-                active={popupActive}
+                setPopupActive={setEventPopupActive}
+                active={eventPopupActive}
               />
             </Popup>
 
+            {/* Calendar create Popup */}
+            <Popup active={calendarCreatePopupActive} setActive={setCalendarCreatePopupActive}>
+              <CreateCalendar setPopupActive={setCalendarCreatePopupActive}
+                active={calendarCreatePopupActive}/>
+                {/* <div>
+                  pidoras
+                </div> */}
+            </Popup>
+
             <div className="img">
-              <img src="../public/photo/logo.jpg"></img>
+            <Clock />
             </div>
             <div className="main_context">
               <div className="sidebar" id="mainId">
-                {/* Search */}
                 <div className="d1">
-                        <div className="koko2"></div>
-                        <input
-                          id="searchInput"
-                          placeholder="Enter event name"
-                        ></input>
-                        <button
-                          onClick={() => {
-                            searchButtonHandle(
-                              testFullCalendar,
-                              eventsElements,
-                              holidaysElements
-                            );
-                          }}
-                        ></button>
+                  <div className="koko2"></div>
+                  <input id="searchInput" placeholder="Enter event name" />
+                  <button
+                    onClick={() => {
+                      searchButtonHandle(
+                        testFullCalendar,
+                        eventsElements,
+                        holidaysElements
+                      );
+                    }}
+                  ></button>
                 </div>
 
 
                 <div className="border1">
                   <div>
-                    <div>
-                      <div className="sidebar" id='addCalendar' onClick={handleCalendarAdd}>
-                        <div className="all_list">Add calendar</div>
-                      </div>
-                    </div>
                     {calendarsElements}
                   </div>
-
                 </div>
-                  <button class="btn">Add</button>
+                  <button class="btn" onClick={() => { setCalendarCreatePopupActive(true) }}>Add</button>
                   <button class="btn" disabled>Disabled</button>
-
-              </div>
+                </div>
 
               <div className="demo-app-main">
                 <div className="day_calendar" id="calendar">
@@ -362,12 +364,12 @@ const Calendar = () => {
                     initialEvents={[...initialEvents, ...holidaysElements]}
                     select={(selectInfo) => {
                       setNewEventInfo(selectInfo);
-                      setPopupActive(true);
+                      setEventPopupActive(true);
                     }}
                     eventContent={renderEventContent}
                     eventClick={(selectInfo) => {
                       setNewEventInfo(selectInfo);
-                      setPopupActive(true);
+                      setEventPopupActive(true);
                     }}
                     eventDrop={handleEvent}
                     eventResize={handleEvent}
