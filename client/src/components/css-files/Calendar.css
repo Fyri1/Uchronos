@@ -1,5 +1,7 @@
 body {
     overflow-y: hidden;
+    
+
 }
 .day{
     background-color: #74992e;
@@ -55,13 +57,13 @@ body {
 }
 
 #mainId{
-  padding:25vh 0px;
+  padding:35vh 0px;
   float: left;  
  
   margin: 15px;
   top:40vh;
-  height: 20vh; 
-  width: 30vh; 
+  height: 30vh; 
+  width: 40vh; 
   /* ширина бара ебара */
   
 }
@@ -293,6 +295,27 @@ body {
   text-align: center;
 }
 
+.sidebarElement {
+  display: flex;
+  width: 100%;
+}
+
+.sidebarElement > div {
+  width: 90%;
+}
+
+.sidebarElement > button {
+  width: 10%;
+  float:right;
+}
+
+.sidebarElement > button:before {
+  content: "\f00d";
+  font-family: FontAwesome;
+  font-size: 16px;
+  color: #F9F0DA;
+}
+
 .border1{
   background-color: #b5d4d2;
   line-height: 30px;
@@ -334,12 +357,12 @@ body {
 }
 /* Active/current link */
 
-.btn {
-  width: 10vh;
-	display: inline-block;	
+.btn_main {
+  width: 30vh;
+	display: inline-block;
 	box-sizing: border-box;
 	padding: 0 25px;
-	margin:  15px 15px 15px  20px;
+	margin:  2vh 5vh 5vh  5vh;
 	outline: none;
 	border: 1px solid #fff;
 	border-radius: 50px;
@@ -350,7 +373,6 @@ body {
 	text-decoration: none;
 	color: #444;
 	background-color: #fff;
-  /* шото очень умное ниже */
 	box-shadow: 0 4px 6px rgb(65 132 144 / 10%), 0 1px 3px rgb(0 0 0 / 8%); 
 	cursor: pointer;
 	user-select: none;
@@ -359,21 +381,22 @@ body {
 	vertical-align: top;
 	transition: box-shadow 0.2s;
 }
-.btn:focus-visible {
+.btn_main:focus-visible {
 	border: 1px solid #4c51f9;
 	outline: none;
 }
-.btn:hover {
+.btn_main:hover {
 	transition: all 0.2s;
 	box-shadow: 0 7px 14px rgb(65 132 144 / 10%), 0 3px 6px rgb(0 0 0 / 8%);
 }
-.btn:active {
+.btn_main:active {
 	background-color: #808080;
 }
-.btn:disabled {
+.btn_main:disabled {
 	background-color: #eee;
 	border-color: #eee;
 	color: #444;
 	cursor: not-allowed;
 }
+
 

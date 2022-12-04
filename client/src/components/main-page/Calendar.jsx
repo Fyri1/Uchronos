@@ -83,7 +83,19 @@ export const handleCalendarAdd = async (values) => {
   try {
     console.log('dobavit pizdec');
     console.log(values);
-    // await $api.post('/calendar/' + selectInfo.event.id);
+    await $api.post('/calendar/', values);
+    window.location.reload();
+  } catch (e) {
+    console.log('401! ' + e);
+  }
+}
+
+const handleCalendarDelete = async (calendarData) => {
+  try {
+    console.log('ydalit pizdec');
+    console.log(calendarData);
+    await $api.delete('/calendar/' + calendarData.id);
+    window.location.reload();
   } catch (e) {
     console.log('401! ' + e);
   }
@@ -241,13 +253,6 @@ const Calendar = () => {
         []
 
       setEventsElements(parsedElements);
-      
-      //// OSTAVIT IBO MOZET NE RABOTAT
-      // if (events.data.data.length) {
-      //   renderCalendarEvents([holidaysElements, parsedElements]);
-      // } else {
-      //   renderCalendarEvents([holidaysElements])
-      // }
       renderCalendarEvents([holidaysElements, parsedElements]);
       console.log(selectedCalendar.title);
     } catch (e) {
@@ -260,9 +265,15 @@ const Calendar = () => {
       <div>
         <div className="sidebar" id={calendar.title} onClick={handleCalendarChange}>
           { calendar.title === displayedCalendarData.title ? (
-            <div className="all_list">{calendar.title}</div>
+            <div className='sidebarElement'>
+              <div className="all_list">{calendar.title}</div>
+              <button onClick={() => { handleCalendarDelete(displayedCalendarData) }}></button>
+            </div>
           ) : (
-            <div className="">{calendar.title}</div>
+            <div className='sidebarElement'>
+              <div className="">{calendar.title}</div>
+              <button id={calendar.id} onClick={() => { handleCalendarDelete(displayedCalendarData) }}></button>
+            </div>
           )}
         </div>
       </div>
@@ -305,15 +316,15 @@ const Calendar = () => {
 
             {/* Calendar create Popup */}
             <Popup active={calendarCreatePopupActive} setActive={setCalendarCreatePopupActive}>
-              <CreateCalendar setPopupActive={setCalendarCreatePopupActive}
-                active={calendarCreatePopupActive}/>
-                {/* <div>
-                  pidoras
-                </div> */}
+              <CreateCalendar
+                setPopupActive={setCalendarCreatePopupActive}
+                active={calendarCreatePopupActive}
+              />
             </Popup>
 
             <div className="img">
             <Clock />
+
             </div>
             <div className="main_context">
               <div className="sidebar" id="mainId">
@@ -337,8 +348,7 @@ const Calendar = () => {
                     {calendarsElements}
                   </div>
                 </div>
-                  <button class="btn" onClick={() => { setCalendarCreatePopupActive(true) }}>Add</button>
-                  <button class="btn" disabled>Disabled</button>
+                  <button class="btn_main" onClick={() => { setCalendarCreatePopupActive(true) }}>Create calendar</button>
                 </div>
 
               <div className="demo-app-main">

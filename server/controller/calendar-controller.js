@@ -24,11 +24,10 @@ class CalendarController {
   }
 
   async getAllCalendarsForUser(req, res, next) {
-    // const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(' ')[1];
     try {
-      // TokenService.validateAccessToken(token);
-      const { user_id } = req.params;
-      const data = await Calendar.getAllCalendarsForUserId(user_id);
+      const userData = TokenService.validateAccessToken(token);
+      const data = await Calendar.getAllCalendarsForUserId(userData.id);
 
       res.status(200);
       res.json({
@@ -62,10 +61,9 @@ class CalendarController {
   }
 
   async addCalendar(req, res, next) {
-    // const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(' ')[1];
     try {
-      // TokenService.validateAccessToken(token);
-      const { user_id } = req.params;
+      const userData = TokenService.validateAccessToken(token);
       console.log(req.body);
 
       const { title, description } = req.body;
@@ -73,16 +71,44 @@ class CalendarController {
       const created_at = new Date().toISOString().replace(/T.*$/, '');
       await Calendar.addCalendar({
         id,
-        user_id,
+        user_id: userData.id,
         title,
         description,
         created_at,
+      });
+
+      const eventId = uuidv4();
+      await CalendarEvent.addCalendarEvent({
+        id: eventId,
+        user_id: userData.id,
+        calendar_id: id,
+        title: "start event",
+        description: "start event description",
+        color: "black",
+        created_at,
+        event_start: "1488-01-01",
+        event_end: "1488-01-01"
       });
 
       res.status(200);
       res.json({ massage: 'calendar created successfully' });
     } catch (e) {
       console.log('pizda calendary: addCalendar ' + e);
+      next(e);
+    }
+  }
+
+  async deleteCalendar(req, res, next) {
+    // const token = req.headers.authorization.split(' ')[1];
+    try {
+      // TokenService.validateAccessToken(token);
+      const { calendar_id } = req.params;
+
+      await Calendar.deleteCalendar(calendar_id);
+      
+      res.status(200);
+      res.json({ massage: "event updated successfully" });
+    } catch (e) {
       next(e);
     }
   }

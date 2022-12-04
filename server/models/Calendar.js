@@ -50,6 +50,18 @@ class Calendar {
     }
 	}
 
+  async deleteCalendar(id) {
+    try {
+      console.log(id);
+      await client('calendars').where('id', '=', id).del();
+    } catch (err) {
+      if (!err.toString().match(/ignore/)) {
+        console.log(err);
+        throw err;
+      }
+    }
+  }
+
 }
 
 export default new Calendar();

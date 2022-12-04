@@ -10,7 +10,8 @@ const router = Express.Router();
 
 router.get('/', CalendarController.getAllCalendars);
 router.get('/:user_id', CalendarController.getAllCalendarsForUser);
-router.post('/:user_id', CalendarController.addCalendar);
+router.post('/', CalendarController.addCalendar);
+router.delete('/:calendar_id', CalendarController.deleteCalendar);
 
 router.get('/event/:calendar_id', CalendarController.getAllEventsForCalendar);
 router.post('/event/:calendar_id', CalendarController.addCalendarEvent);

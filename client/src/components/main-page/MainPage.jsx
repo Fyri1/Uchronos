@@ -12,7 +12,7 @@ export const Clock = () => {
   
   <div className="clock">
     <div className="hour">
-      <div className="hr" id="hr"></div>
+      <div className="hr" id="hr"> </div>
     </div>
     <div className="min">
       <div className="mn" id="mn"></div>
