@@ -21,7 +21,6 @@ const CreateEvent = ({
   setPopupActive,
   active,
 }) => {
-  // const [stateEvent, setEvent] = use
   const [state, setState] = useState({
     values: {
       id: '',

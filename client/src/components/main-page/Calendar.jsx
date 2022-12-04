@@ -14,7 +14,7 @@ import '../css-files/Calendar.css';
 
 export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
   let calendarApi = selectInfo.view.calendar;
-  calendarApi.unselect(); // clear date selection
+  calendarApi.unselect();
   let start = '';
   let end = '';
       if (typeof values.range.start !== 'string') {
@@ -35,8 +35,6 @@ export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
       }
   try {
     const initialEvents = {
-      //// NADO DETO NARIT EBANII ID USERA
-      // user_id: '8f0a0cd0-c74b-46aa-9a67-13d88076a36f',
       title: values.title,
       description: values.description,
       color: values.color,
@@ -47,24 +45,6 @@ export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
 
     // Check if such event was already created
     if (selectInfo.event?.id) {
-      //// TEMP HYINYA
-      //// YA XZ KAK ESHE SDELAT SHOB PO KRASOTE POETOMY DELAEM PO PACANSKI
-      // if (values.title) {
-      //   selectInfo.title = document.getElementById('titleInput').value;
-      // } else {
-      //   selectInfo.title = selectInfo.event.title;
-      // }
-
-      // if (document.getElementById('descriptionInput').value) {
-      //   selectInfo.description =
-      //     document.getElementById('descriptionInput').value;
-      // }
-
-      // if (document.getElementById('colorInput').value) {
-      //   selectInfo.color = document.getElementById('colorInput').value;
-      // } else {
-      //   selectInfo.color = selectInfo.event.backgroundColor;
-      // }
       selectInfo.id = values.id;
       selectInfo.title = values.title;
       selectInfo.description = values.description;
@@ -72,8 +52,6 @@ export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
       selectInfo.start = start;
       selectInfo.end = end;
 
-      // selectInfo.start = selectInfo.event.startStr;
-      // selectInfo.end = selectInfo.event.endStr;
       await $api.patch('/calendar/event/' + selectInfo.event.id, initialEvents);
       calendarApi.getEventById(selectInfo.event.id).remove();
       calendarApi.addEvent(selectInfo);
@@ -83,7 +61,6 @@ export const handleDateSelect = async (selectInfo, values, setPopupActive) => {
     }
 
     setPopupActive(false);
-    // calendarApi.rerenderEvents();
   } catch (e) {
     console.log('401! ' + e);
   }
@@ -191,6 +168,20 @@ const Calendar = () => {
     }
   }
 
+  const renderCalendarEvents = (eventsArr) => {
+    console.log('remove govna')
+    let removeEvents = testFullCalendar.getEventSources();
+    removeEvents.forEach((event) => {
+      event.remove();
+    });
+    testFullCalendar.removeAllEvents();
+
+    eventsArr.forEach(events => {
+      console.log('render govna');
+      events.forEach((eventElement) => testFullCalendar.addEvent(eventElement));
+    })
+  }
+
   const handleEvent = async (event) => {
     console.log('ya pidoras');
     console.log(event);
@@ -204,36 +195,68 @@ const Calendar = () => {
     }
   };
 
+  const handleCalendarAdd = async () => {
+    try {
+      console.log('dobavit pizdec');
+    } catch (e) {
+      console.log('401! ' + e);
+    }
+  }
+
   const handleCalendarChange = async (event) => {
     try {
       console.log('ishy pizdec');
-      console.log(displayedCalendarData);
       const selectedCalendar = calendarsList.find(
         (calendar) => calendar.title === event.currentTarget.id
       );
       console.log(selectedCalendar.id);
       const events = await $api.get('/calendar/event/' + selectedCalendar.id);
-      console.log('pizos');
+      
+      console.log(events.data.data);
 
       setDisplayedCalendarData({
-        ...selectedCalendar,
+        id: selectedCalendar.id,
+        title: selectedCalendar.title,
         events: events.data.data,
+        searchParam: ''
       });
+      
+      const parsedElements = events.data.data.length
+        ?
+        events.data.data.map((event, i, arr) => {
+          return {
+            id: event.id,
+            title: event.title,
+            start: event.event_start,
+            color: event.color,
+            description: event.description,
+            end: event.event_end,
+          };
+        })
+        :
+        []
+        setEventsElements(
+          parsedElements
+        );
+      
+      //// OSTAVIT IBO MOZET NE RABOTAT
+      // if (events.data.data.length) {
+      //   renderCalendarEvents([holidaysElements, parsedElements]);
+      // } else {
+      //   renderCalendarEvents([holidaysElements])
+      // }
+      renderCalendarEvents([holidaysElements, parsedElements]);
+      console.log(selectedCalendar.title);
     } catch (e) {
       console.log('401! ' + e);
     }
   };
 
-  // TEMP
   const calendarsElements = calendarsList.map((calendar, i, arr) => {
     return (
       <div>
-        <div
-          className="sidebar"
-          id={calendar.title}
-          onClick={handleCalendarChange}
-        >
-          {calendar.title === displayedCalendarData.title ? (
+        <div className="sidebar" id={calendar.title} onClick={handleCalendarChange}>
+          { calendar.title === displayedCalendarData.title ? (
             <div className="all_list">{calendar.title}</div>
           ) : (
             <div className="">{calendar.title}</div>
@@ -282,7 +305,14 @@ const Calendar = () => {
             <div className="main_context">
               <div className="sidebar" id="mainId">
                 <div className="border1">
-                  <div>{calendarsElements}</div>
+                  <div>
+                    <div>
+                      <div className="sidebar" id='addCalendar' onClick={handleCalendarAdd}>
+                        <div className="all_list">Add calendar</div>
+                      </div>
+                    </div>
+                    {calendarsElements}
+                  </div>
                   <div className="d1">
                     <div className="koko2"></div>
                     <input
