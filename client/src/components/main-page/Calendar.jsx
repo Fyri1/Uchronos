@@ -304,6 +304,25 @@ const Calendar = () => {
             </div>
             <div className="main_context">
               <div className="sidebar" id="mainId">
+                {/* Search */}
+                <div className="d1">
+                        <div className="koko2"></div>
+                        <input
+                          id="searchInput"
+                          placeholder="Enter event name"
+                        ></input>
+                        <button
+                          onClick={() => {
+                            searchButtonHandle(
+                              testFullCalendar,
+                              eventsElements,
+                              holidaysElements
+                            );
+                          }}
+                        ></button>
+                </div>
+
+
                 <div className="border1">
                   <div>
                     <div>
@@ -313,23 +332,11 @@ const Calendar = () => {
                     </div>
                     {calendarsElements}
                   </div>
-                  <div className="d1">
-                    <div className="koko2"></div>
-                    <input
-                      id="searchInput"
-                      placeholder="Enter event name"
-                    ></input>
-                    <button
-                      onClick={() => {
-                        searchButtonHandle(
-                          testFullCalendar,
-                          eventsElements,
-                          holidaysElements
-                        );
-                      }}
-                    ></button>
-                  </div>
+
                 </div>
+                  <button class="btn">Add</button>
+                  <button class="btn" disabled>Disabled</button>
+
               </div>
 
               <div className="demo-app-main">
