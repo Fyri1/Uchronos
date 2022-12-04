@@ -1,6 +1,4 @@
 make.exe --dry-run --always-make --keep-going --print-directory
-make.exe: Entering directory 'c:/Users/Bogomol/Documents/KHPI/campus/chronos/Uchronos'
-make -C server setup
-make -C client install
-make.exe: Leaving directory 'c:/Users/Bogomol/Documents/KHPI/campus/chronos/Uchronos'
- 
+"make.exe" �� ���� ����७��� ��� ���譥�
+��������, �ᯮ��塞�� �ணࠬ��� ��� ������ 䠩���.
+
